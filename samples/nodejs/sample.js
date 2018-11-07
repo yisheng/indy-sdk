@@ -299,7 +299,7 @@ async function getVerinym(poolHandle, from, fromWallet, fromDid, fromToVerKey, t
     }
 
     console.log(`${from} -> Send Nym to Ledger for \"${to}\" DID with ${role} Role`)
-    await sendNym(poolHandle, fromWallet, fromDid, authdecryptedDidInfoJson.did, authdecryptedDidInfoJson.verkey)
+    await sendNym(poolHandle, fromWallet, fromDid, authdecryptedDidInfoJson.did, authdecryptedDidInfoJson.verkey, role)
 
     return toDid
 }
