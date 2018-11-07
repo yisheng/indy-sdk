@@ -98,15 +98,15 @@ async function run() {
     console.log('Steward -> Send "Job-Certificate" Schema to Ledger')
     await sendSchema(poolHandle, stewardWallet, stewardDid, jobCertificateSchema)
 
-    console.log('Park -> Create "Park-Certificate" Schema')
-    let [parkCertificateSchemaId, parkCertificateSchema] = await indy.issuerCreateSchema(parkDid, 'Park-Certificate', '0.1', ['first_name', 'last_name', 'status', 'level'])
+    console.log('Steward -> Create "Park-Certificate" Schema')
+    let [parkCertificateSchemaId, parkCertificateSchema] = await indy.issuerCreateSchema(stewardDid, 'Park-Certificate', '0.1', ['first_name', 'last_name', 'status', 'level'])
     console.log({
         parkCertificateSchemaId: parkCertificateSchemaId,
         parkCertificateSchema, parkCertificateSchema
     })
 
-    console.log('Park -> Send "Park-Certificate" Schema to Ledger')
-    await sendSchema(poolHandle, parkWallet, parkDid, parkCertificateSchema)
+    console.log('Steward -> Send "Park-Certificate" Schema to Ledger')
+    await sendSchema(poolHandle, stewardWallet, stewardDid, parkCertificateSchema)
 
     console.log('=============================================')
     console.log('=== Company Credential Definition Setup ===')
@@ -119,7 +119,7 @@ async function run() {
     })
 
     console.log('Company -> Create and store "Company Job-Certificate" Credential Definition')
-    let [companyJobCertificateCredDefId, companyJobCertificateCredDefJson] = await indy.issuerCreateAndStoreCredentialDef(companyWallet, companyDid, jobCertificateSchema, 'TAG1', 'CL', '{"support_revocation": false}')
+    let [companyJobCertificateCredDefId, companyJobCertificateCredDefJson] = await indy.issuerCreateAndStoreCredentialDef(companyWallet, companyDid, theJobCertificateSchema, 'TAG1', 'CL', '{"support_revocation": false}')
     console.log({
         companyJobCertificateCredDefId: companyJobCertificateCredDefId,
         companyJobCertificateCredDefJson: companyJobCertificateCredDefJson
@@ -127,6 +127,29 @@ async function run() {
 
     console.log('Company -> Send "Company Job-Certificate" Credential Definition to Ledger')
     await sendCredDef(poolHandle, companyWallet, companyDid, companyJobCertificateCredDefJson)
+
+    console.log('=============================================')
+    console.log('=== Park Credential Definition Setup ===')
+
+    console.log('Park -> Get "Park-Certificate" Schema from Ledger')
+    let [theParkCertificateSchemaId, theParkCertificateSchema] = await getSchema(poolHandle, parkDid, parkCertificateSchemaId)
+    console.log({
+        theParkCertificateSchemaId, theParkCertificateSchemaId,
+        theParkCertificateSchema: theParkCertificateSchema
+    })
+
+    console.log('Park -> Create and store "Park Park-Certificate" Credential Definition')
+    let [parkParkCertificateCredDefId, parkParkCertificateCredDefJson] = await indy.issuerCreateAndStoreCredentialDef(parkWallet, parkDid, theParkCertificateSchema, 'TAG1', 'CL', '{"support_revocation": false}')
+    console.log({
+        parkParkCertificateCredDefId: parkParkCertificateCredDefId,
+        parkParkCertificateCredDefJson: parkParkCertificateCredDefJson
+    })
+
+    console.log('Park -> Send "Park Park-Certificate" Credential Definition to Ledger')
+    await sendCredDef(poolHandle, parkWallet, parkDid, parkParkCertificateCredDefJson)
+
+
+
 
 
     console.log('=============================================')
