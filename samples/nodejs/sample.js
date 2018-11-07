@@ -183,6 +183,10 @@ async function run() {
     await indy.closeWallet(companyWallet)
     await indy.deleteWallet(companyWalletConfig, companyWalletCredentials)
 
+    console.log('Daniel -> Close and Delete Wallet')
+    await indy.closeWallet(danielWallet)
+    await indy.deleteWallet(danielWalletConfig, danielWalletCredentials)
+
     console.log('Close and Delete Pool')
     await indy.closePoolLedger(poolHandle)
     await indy.deletePoolLedgerConfig(poolName)
