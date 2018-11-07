@@ -88,7 +88,15 @@ async function run() {
     console.log('=============================================')
     console.log('=== Credential Schemas Setup ===')
 
-    // console.log('')
+    console.log('Steward -> Create "Job-Certificate" Schema')
+    let [jobCertificateSchemaId, jobCertificateSchema] = await indy.issuerCreateSchema(stewardDid, 'Job-Certificate', '0.1', ['first_name', 'last_name', 'salary', 'status', 'experience'])
+    console.log({
+        jobCertificateSchemaId: jobCertificateSchemaId,
+        jobCertificateSchema: jobCertificateSchema
+    })
+
+    console.log('Steward -> Send "Job-Certificate" Schema to Ledger')
+    await sendSchema(poolHandle, stewardWallet, stewardDid, jobCertificateSchema)
 
     console.log('Park -> Create "Park-Certificate" Schema')
     let [parkCertificateSchemaId, parkCertificateSchema] = await indy.issuerCreateSchema(parkDid, 'Park-Certificate', '0.1', ['first_name', 'last_name', 'status', 'level'])
