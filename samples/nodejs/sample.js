@@ -25,8 +25,8 @@ async function run() {
 
     let poolHandle = await indy.openPoolLedger(poolName)
 
-    console.log('=============================================')
-    console.log('=== Steward Setup ===')
+    console.log("\n=============================================")
+    console.log("=== Steward Setup ===\n")
 
     console.log('Steward -> Create Wallet')
     let stewardWalletConfig = {'id': 'stewardWalletName'}
@@ -43,8 +43,8 @@ async function run() {
         'stewardVerKey': stewardVerKey
     })
 
-    console.log('=============================================')
-    console.log('=== Park Onboarding And GetVerinym ===')
+    console.log("\n=============================================")
+    console.log("=== Park Onboarding And GetVerinym ===\n")
     
     console.log('Park -> Create Wallet')
     let parkWalletConfig = {'id': 'parkWallet'}
@@ -64,8 +64,8 @@ async function run() {
         parkDid: parkDid
     })
 
-    console.log('=============================================')
-    console.log('=== Company Onboarding And GetVerinym ===')
+    console.log("\n=============================================")
+    console.log("=== Company Onboarding And GetVerinym ===\n")
 
     console.log('Company -> Create Wallet')
     let companyWalletConfig = {'id': 'companyWallet'}
@@ -85,8 +85,8 @@ async function run() {
         companyDid: companyDid
     })
 
-    console.log('=============================================')
-    console.log('=== Credential Schemas Setup ===')
+    console.log("\n=============================================")
+    console.log("=== Credential Schemas Setup ===\n")
 
     console.log('Steward -> Create "Job-Certificate" Schema')
     let [jobCertificateSchemaId, jobCertificateSchema] = await indy.issuerCreateSchema(stewardDid, 'Job-Certificate', '0.1', ['first_name', 'last_name', 'salary', 'status', 'experience'])
@@ -108,8 +108,8 @@ async function run() {
     console.log('Steward -> Send "Park-Certificate" Schema to Ledger')
     await sendSchema(poolHandle, stewardWallet, stewardDid, parkCertificateSchema)
 
-    console.log('=============================================')
-    console.log('=== Company Credential Definition Setup ===')
+    console.log("\n=============================================")
+    console.log("=== Company Credential Definition Setup ===\n")
 
     console.log('Company -> Get "Job-Certificate" Schema from Ledger')
     let [theJobCertificateSchemaId, theJobCertificateSchema] = await getSchema(poolHandle, companyDid, jobCertificateSchemaId)
@@ -128,8 +128,8 @@ async function run() {
     console.log('Company -> Send "Company Job-Certificate" Credential Definition to Ledger')
     await sendCredDef(poolHandle, companyWallet, companyDid, companyJobCertificateCredDefJson)
 
-    console.log('=============================================')
-    console.log('=== Park Credential Definition Setup ===')
+    console.log("\n=============================================")
+    console.log("=== Park Credential Definition Setup ===\n")
 
     console.log('Park -> Get "Park-Certificate" Schema from Ledger')
     let [theParkCertificateSchemaId, theParkCertificateSchema] = await getSchema(poolHandle, parkDid, parkCertificateSchemaId)
@@ -151,9 +151,8 @@ async function run() {
 
 
 
-
-    console.log('=============================================')
-    console.log('=== Cleanup ===')
+    console.log("\n=============================================")
+    console.log("=== Cleanup ===\n")
 
     console.log('Steward -> Close and Delete Wallet')
     await indy.closeWallet(stewardWallet)
@@ -185,7 +184,7 @@ async function createAndOpenWallet(config, credentials) {
 }
 
 async function onboarding(poolHandle, from, fromWallet, fromDid, to, toWallet) {
-    console.log('*** onboarding ***')
+    console.log("\n*** onboarding ***\n")
 
     console.log(`${from} -> Create DID \"${from} ${to}\"`)
     let [fromToDid, fromToVerKey] = await indy.createAndStoreMyDid(fromWallet, {})
@@ -257,7 +256,7 @@ async function onboarding(poolHandle, from, fromWallet, fromDid, to, toWallet) {
 }
 
 async function getVerinym(poolHandle, from, fromWallet, fromDid, fromToVerKey, to, toWallet, toFromDid, toFromVerKey, role) {
-    console.log('*** getVerinym ***')
+    console.log("\n*** getVerinym ***\n")
     
     console.log(`${to} -> Create DID`)
     let [toDid, toVerKey] = await indy.createAndStoreMyDid(toWallet, {})
