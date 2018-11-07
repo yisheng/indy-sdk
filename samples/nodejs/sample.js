@@ -108,10 +108,25 @@ async function run() {
     console.log('Park -> Send "Park-Certificate" Schema to Ledger')
     await sendSchema(poolHandle, parkWallet, parkDid, parkCertificateSchema)
 
+    console.log('=============================================')
+    console.log('=== Company Credential Definition Setup ===')
 
+    console.log('Company -> Get "Job-Certificate" Schema from Ledger')
+    let [theJobCertificateSchemaId, theJobCertificateSchema] = await getSchema(poolHandle, companyDid, jobCertificateSchemaId)
+    console.log({
+        theJobCertificateSchemaId: theJobCertificateSchemaId,
+        theJobCertificateSchema: theJobCertificateSchema
+    })
 
-    
+    console.log('Company -> Create and store "Company Job-Certificate" Credential Definition')
+    let [companyJobCertificateCredDefId, companyJobCertificateCredDefJson] = await indy.issuerCreateAndStoreCredentialDef(companyWallet, companyDid, jobCertificateSchema, 'TAG1', 'CL', '{"support_revocation": false}')
+    console.log({
+        companyJobCertificateCredDefId: companyJobCertificateCredDefId,
+        companyJobCertificateCredDefJson: companyJobCertificateCredDefJson
+    })
 
+    console.log('Company -> Send "Company Job-Certificate" Credential Definition to Ledger')
+    await sendCredDef(poolHandle, companyWallet, companyDid, companyJobCertificateCredDefJson)
 
 
     console.log('=============================================')
@@ -120,6 +135,14 @@ async function run() {
     console.log('Steward -> Close and Delete Wallet')
     await indy.closeWallet(stewardWallet)
     await indy.deleteWallet(stewardWalletConfig, stewardWalletCredentials)
+
+    console.log('Park -> Close and Delete Wallet')
+    await indy.closeWallet(parkWallet)
+    await indy.deleteWallet(parkWalletConfig, parkWalletCredentials)
+
+    console.log('Company -> Close and Delete Wallet')
+    await indy.closeWallet(companyWallet)
+    await indy.deleteWallet(companyWalletConfig, companyWalletCredentials)
 
     console.log('Close and Delete Pool')
     await indy.closePoolLedger(poolHandle)
@@ -267,4 +290,15 @@ async function sendNym(poolHandle, walletHandle, submitterDid, targetDid, target
 async function sendSchema(poolHandle, walletHandle, submitterDid, schema) {
     let schemaRequest = await indy.buildSchemaRequest(submitterDid, schema)
     await indy.signAndSubmitRequest(poolHandle, walletHandle, submitterDid, schemaRequest)
+}
+
+async function getSchema(poolHandle, submitterDid, schemaId) {
+    let request = await indy.buildGetSchemaRequest(submitterDid, schemaId)
+    let response = await indy.submitRequest(poolHandle, request)
+    return await indy.parseGetSchemaResponse(response)
+}
+
+async function sendCredDef(poolHandle, walletHandle, submitterDid, credDef) {
+    let request = await indy.buildCredDefRequest(submitterDid, credDef)
+    await indy.signAndSubmitRequest(poolHandle, walletHandle, submitterDid, request)
 }
