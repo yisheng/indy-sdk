@@ -148,6 +148,23 @@ async function run() {
     console.log('Park -> Send "Park Park-Certificate" Credential Definition to Ledger')
     await sendCredDef(poolHandle, parkWallet, parkDid, parkParkCertificateCredDefJson)
 
+    console.log("\n=============================================")
+    console.log("=== Daniel Onboarding ===\n")
+
+    console.log('Daniel -> Create Wallet')
+    let danielWalletConfig = {'id': 'danielWallet'}
+    let danielWalletCredentials = {'key': 'daniel_key'}
+    let danielWallet = await createAndOpenWallet(danielWalletConfig, danielWalletCredentials)
+
+    let [companyDanielDid, companyDanielVerKey, danielCompanyDid, danielCompanyVerkey, companyDanielConnectionResponse] = await onboarding(poolHandle, 'Company', companyWallet, companyDid, 'Daniel', danielWallet)
+    console.log({
+        companyDanielDid: companyDanielDid,
+        companyDanielVerKey: companyDanielVerKey,
+        danielCompanyDid: danielCompanyDid,
+        danielCompanyVerkey: danielCompanyVerkey,
+        companyDanielConnectionResponse: companyDanielConnectionResponse
+    })
+
 
 
 
