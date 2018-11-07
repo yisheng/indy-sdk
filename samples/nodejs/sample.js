@@ -306,12 +306,22 @@ async function getVerinym(poolHandle, from, fromWallet, fromDid, fromToVerKey, t
 
 async function sendNym(poolHandle, walletHandle, submitterDid, targetDid, targetVerKey, role) {
     let nymRequest = await indy.buildNymRequest(submitterDid, targetDid, targetVerKey, null, role)
-    await indy.signAndSubmitRequest(poolHandle, walletHandle, submitterDid, nymRequest)
+    let requestResult = await indy.signAndSubmitRequest(poolHandle, walletHandle, submitterDid, nymRequest)
+    console.log({
+        requestResult: requestResult
+    })
+
+    return requestResult
 }
 
 async function sendSchema(poolHandle, walletHandle, submitterDid, schema) {
     let schemaRequest = await indy.buildSchemaRequest(submitterDid, schema)
-    await indy.signAndSubmitRequest(poolHandle, walletHandle, submitterDid, schemaRequest)
+    let requestResult = await indy.signAndSubmitRequest(poolHandle, walletHandle, submitterDid, schemaRequest)
+    console.log({
+        requestResult: requestResult
+    })
+
+    return requestResult
 }
 
 async function getSchema(poolHandle, submitterDid, schemaId) {
