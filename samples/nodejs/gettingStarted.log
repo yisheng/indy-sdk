@@ -1,0 +1,276 @@
+localhost:nodejs yisheng$ npm start
+
+> gettingstarted@1.0.0 start /Users/yisheng/Projects/indy-sdk/samples/nodejs
+> node gettingStarted.js
+
+Getting started -> started
+Open Pool Ledger: pool1
+==============================
+=== Getting Trust Anchor credentials for Faber, Acme, Thrift and Government  ==
+------------------------------
+"Sovrin Steward" -> Create wallet
+"Sovrin Steward" -> Create and store in Wallet DID from seed
+==============================
+== Getting Trust Anchor credentials - Government Onboarding  ==
+------------------------------
+"Sovrin Steward" > Create and store in Wallet "Sovrin Steward Government" DID
+"Sovrin Steward" > Send Nym to Ledger for "Sovrin Steward Government" DID
+"Sovrin Steward" > Send connection request to Government with "Sovrin Steward Government" DID and nonce
+"Government" > Create wallet"
+"Government" > Create and store in Wallet "Government Sovrin Steward" DID
+"Government" > Get key for did from "Sovrin Steward" connection request
+"Government" > Anoncrypt connection response for "Sovrin Steward" with "Government Sovrin Steward" DID, verkey and nonce
+"Government" > Send anoncrypted connection response to "Sovrin Steward"
+"Sovrin Steward" > Anondecrypt connection response from "Government"
+"Sovrin Steward" > Authenticates "Government" by comparision of Nonce
+"Sovrin Steward" > Send Nym to Ledger for "Government Sovrin Steward" DID
+==============================
+== Getting Trust Anchor credentials - Government getting Verinym  ==
+------------------------------
+"Government" > Create and store in Wallet "Government" new DID"
+"Government" > Authcrypt "Government DID info" for "Sovrin Steward"
+"Government" > Send authcrypted "Government DID info" to Sovrin Steward
+"Sovrin Steward" > Authdecrypted "Government DID info" from Government
+"Sovrin Steward" > Authenticate Government by comparision of Verkeys
+"Sovrin Steward" > Send Nym to Ledger for "Government DID" with TRUST_ANCHOR Role
+==============================
+== Getting Trust Anchor credentials - Faber Onboarding  ==
+------------------------------
+"Sovrin Steward" > Create and store in Wallet "Sovrin Steward Faber" DID
+"Sovrin Steward" > Send Nym to Ledger for "Sovrin Steward Faber" DID
+"Sovrin Steward" > Send connection request to Faber with "Sovrin Steward Faber" DID and nonce
+"Faber" > Create wallet"
+"Faber" > Create and store in Wallet "Faber Sovrin Steward" DID
+"Faber" > Get key for did from "Sovrin Steward" connection request
+"Faber" > Anoncrypt connection response for "Sovrin Steward" with "Faber Sovrin Steward" DID, verkey and nonce
+"Faber" > Send anoncrypted connection response to "Sovrin Steward"
+"Sovrin Steward" > Anondecrypt connection response from "Faber"
+"Sovrin Steward" > Authenticates "Faber" by comparision of Nonce
+"Sovrin Steward" > Send Nym to Ledger for "Faber Sovrin Steward" DID
+==============================
+== Getting Trust Anchor credentials - Faber getting Verinym  ==
+------------------------------
+"Faber" > Create and store in Wallet "Faber" new DID"
+"Faber" > Authcrypt "Faber DID info" for "Sovrin Steward"
+"Faber" > Send authcrypted "Faber DID info" to Sovrin Steward
+"Sovrin Steward" > Authdecrypted "Faber DID info" from Faber
+"Sovrin Steward" > Authenticate Faber by comparision of Verkeys
+"Sovrin Steward" > Send Nym to Ledger for "Faber DID" with TRUST_ANCHOR Role
+==============================
+== Getting Trust Anchor credentials - Acme Onboarding  ==
+------------------------------
+"Sovrin Steward" > Create and store in Wallet "Sovrin Steward Acme" DID
+"Sovrin Steward" > Send Nym to Ledger for "Sovrin Steward Acme" DID
+"Sovrin Steward" > Send connection request to Acme with "Sovrin Steward Acme" DID and nonce
+"Acme" > Create wallet"
+"Acme" > Create and store in Wallet "Acme Sovrin Steward" DID
+"Acme" > Get key for did from "Sovrin Steward" connection request
+"Acme" > Anoncrypt connection response for "Sovrin Steward" with "Acme Sovrin Steward" DID, verkey and nonce
+"Acme" > Send anoncrypted connection response to "Sovrin Steward"
+"Sovrin Steward" > Anondecrypt connection response from "Acme"
+"Sovrin Steward" > Authenticates "Acme" by comparision of Nonce
+"Sovrin Steward" > Send Nym to Ledger for "Acme Sovrin Steward" DID
+==============================
+== Getting Trust Anchor credentials - Acme getting Verinym  ==
+------------------------------
+"Acme" > Create and store in Wallet "Acme" new DID"
+"Acme" > Authcrypt "Acme DID info" for "Sovrin Steward"
+"Acme" > Send authcrypted "Acme DID info" to Sovrin Steward
+"Sovrin Steward" > Authdecrypted "Acme DID info" from Acme
+"Sovrin Steward" > Authenticate Acme by comparision of Verkeys
+"Sovrin Steward" > Send Nym to Ledger for "Acme DID" with TRUST_ANCHOR Role
+==============================
+== Getting Trust Anchor credentials - Thrift Onboarding  ==
+------------------------------
+"Sovrin Steward" > Create and store in Wallet "Sovrin Steward Thrift" DID
+"Sovrin Steward" > Send Nym to Ledger for "Sovrin Steward Thrift" DID
+"Sovrin Steward" > Send connection request to Thrift with "Sovrin Steward Thrift" DID and nonce
+"Thrift" > Create wallet"
+"Thrift" > Create and store in Wallet "Thrift Sovrin Steward" DID
+"Thrift" > Get key for did from "Sovrin Steward" connection request
+"Thrift" > Anoncrypt connection response for "Sovrin Steward" with "Thrift Sovrin Steward" DID, verkey and nonce
+"Thrift" > Send anoncrypted connection response to "Sovrin Steward"
+"Sovrin Steward" > Anondecrypt connection response from "Thrift"
+"Sovrin Steward" > Authenticates "Thrift" by comparision of Nonce
+"Sovrin Steward" > Send Nym to Ledger for "Thrift Sovrin Steward" DID
+==============================
+== Getting Trust Anchor credentials - Thrift getting Verinym  ==
+------------------------------
+"Thrift" > Create and store in Wallet "Thrift" new DID"
+"Thrift" > Authcrypt "Thrift DID info" for "Sovrin Steward"
+"Thrift" > Send authcrypted "Thrift DID info" to Sovrin Steward
+"Sovrin Steward" > Authdecrypted "Thrift DID info" from Thrift
+"Sovrin Steward" > Authenticate Thrift by comparision of Verkeys
+"Sovrin Steward" > Send Nym to Ledger for "Thrift DID" with TRUST_ANCHOR Role
+==============================
+=== Credential Schemas Setup ==
+------------------------------
+"Government" -> Create "Job-Certificate" Schema
+"Government" -> Send "Job-Certificate" Schema to Ledger
+"Government" -> Create "Transcript" Schema
+"Government" -> Send "Transcript" Schema to Ledger
+==============================
+=== Faber Credential Definition Setup ==
+------------------------------
+"Faber" -> Get "Transcript" Schema from Ledger
+"Faber" -> Create and store in Wallet "Faber Transcript" Credential Definition
+"Faber" -> Send  "Faber Transcript" Credential Definition to Ledger
+==============================
+=== Acme Credential Definition Setup ==
+------------------------------
+"Acme" ->  Get from Ledger "Job-Certificate" Schema
+"Acme" -> Create and store in Wallet "Acme Job-Certificate" Credential Definition
+"Acme" -> Send "Acme Job-Certificate" Credential Definition to Ledger
+==============================
+=== Getting Transcript with Faber ==
+==============================
+== Getting Transcript with Faber - Onboarding ==
+------------------------------
+"Faber" > Create and store in Wallet "Faber Alice" DID
+"Faber" > Send Nym to Ledger for "Faber Alice" DID
+"Faber" > Send connection request to Alice with "Faber Alice" DID and nonce
+"Alice" > Create wallet"
+"Alice" > Create and store in Wallet "Alice Faber" DID
+"Alice" > Get key for did from "Faber" connection request
+"Alice" > Anoncrypt connection response for "Faber" with "Alice Faber" DID, verkey and nonce
+"Alice" > Send anoncrypted connection response to "Faber"
+"Faber" > Anondecrypt connection response from "Alice"
+"Faber" > Authenticates "Alice" by comparision of Nonce
+"Faber" > Send Nym to Ledger for "Alice Faber" DID
+==============================
+== Getting Transcript with Faber - Getting Transcript Credential ==
+------------------------------
+"Faber" -> Create "Transcript" Credential Offer for Alice
+"Faber" -> Get key for Alice did
+"Faber" -> Authcrypt "Transcript" Credential Offer for Alice
+"Faber" -> Send authcrypted "Transcript" Credential Offer to Alice
+"Alice" -> Authdecrypted "Transcript" Credential Offer from Faber
+"Alice" -> Create and store "Alice" Master Secret in Wallet
+"Alice" -> Get "Faber Transcript" Credential Definition from Ledger
+"Alice" -> Create "Transcript" Credential Request for Faber
+"Alice" -> Authcrypt "Transcript" Credential Request for Faber
+"Alice" -> Send authcrypted "Transcript" Credential Request to Faber
+"Faber" -> Authdecrypt "Transcript" Credential Request from Alice
+"Faber" -> Create "Transcript" Credential for Alice
+"Faber" -> Authcrypt "Transcript" Credential for Alice
+"Faber" -> Send authcrypted "Transcript" Credential to Alice
+"Alice" -> Authdecrypted "Transcript" Credential from Faber
+"Alice" -> Store "Transcript" Credential from Faber
+==============================
+=== Apply for the job with Acme ==
+==============================
+== Apply for the job with Acme - Onboarding ==
+------------------------------
+"Acme" > Create and store in Wallet "Acme Alice" DID
+"Acme" > Send Nym to Ledger for "Acme Alice" DID
+"Acme" > Send connection request to Alice with "Acme Alice" DID and nonce
+"Alice" > Create and store in Wallet "Alice Acme" DID
+"Alice" > Get key for did from "Acme" connection request
+"Alice" > Anoncrypt connection response for "Acme" with "Alice Acme" DID, verkey and nonce
+"Alice" > Send anoncrypted connection response to "Acme"
+"Acme" > Anondecrypt connection response from "Alice"
+"Acme" > Authenticates "Alice" by comparision of Nonce
+"Acme" > Send Nym to Ledger for "Alice Acme" DID
+==============================
+== Apply for the job with Acme - Transcript proving ==
+------------------------------
+"Acme" -> Create "Job-Application" Proof Request
+"Acme" -> Get key for Alice did
+"Acme" -> Authcrypt "Job-Application" Proof Request for Alice
+"Acme" -> Send authcrypted "Job-Application" Proof Request to Alice
+"Alice" -> Authdecrypt "Job-Application" Proof Request from Acme
+"Alice" -> Get credentials for "Job-Application" Proof Request
+"Alice" -> Get Schema from Ledger
+"Alice" -> Get Claim Definition from Ledger
+"Alice" -> Create "Job-Application" Proof
+"Alice" -> Authcrypt "Job-Application" Proof for Acme
+"Alice" -> Send authcrypted "Job-Application" Proof to Acme
+"Acme" -> Authdecrypted "Job-Application" Proof from Alice
+"Acme" -> Get Schema from Ledger
+"Acme" -> Get Claim Definition from Ledger
+"Acme" -> Verify "Job-Application" Proof from Alice
+==============================
+== Apply for the job with Acme - Getting Job-Certificate Credential ==
+------------------------------
+"Acme" -> Create "Job-Certificate" Credential Offer for Alice
+"Acme" -> Get key for Alice did
+"Acme" -> Authcrypt "Job-Certificate" Credential Offer for Alice
+"Acme" -> Send authcrypted "Job-Certificate" Credential Offer to Alice
+"Alice" -> Authdecrypted "Job-Certificate" Credential Offer from Acme
+"Alice" -> Get "Acme Job-Certificate" Credential Definition from Ledger
+"Alice" -> Create and store in Wallet "Job-Certificate" Credential Request for Acme
+"Alice" -> Authcrypt "Job-Certificate" Credential Request for Acme
+"Alice" -> Send authcrypted "Job-Certificate" Credential Request to Acme
+"Acme" -> Authdecrypt "Job-Certificate" Credential Request from Alice
+"Acme" -> Create "Job-Certificate" Credential for Alice
+"Acme" ->  Authcrypt "Job-Certificate" Credential for Alice
+"Acme" ->  Send authcrypted "Job-Certificate" Credential to Alice
+"Alice" -> Authdecrypted "Job-Certificate" Credential from Acme
+"Alice" -> Store "Job-Certificate" Credential
+==============================
+=== Apply for the loan with Thrift ==
+==============================
+== Apply for the loan with Thrift - Onboarding ==
+------------------------------
+"Thrift" > Create and store in Wallet "Thrift Alice" DID
+"Thrift" > Send Nym to Ledger for "Thrift Alice" DID
+"Thrift" > Send connection request to Alice with "Thrift Alice" DID and nonce
+"Alice" > Create and store in Wallet "Alice Thrift" DID
+"Alice" > Get key for did from "Thrift" connection request
+"Alice" > Anoncrypt connection response for "Thrift" with "Alice Thrift" DID, verkey and nonce
+"Alice" > Send anoncrypted connection response to "Thrift"
+"Thrift" > Anondecrypt connection response from "Alice"
+"Thrift" > Authenticates "Alice" by comparision of Nonce
+"Thrift" > Send Nym to Ledger for "Alice Thrift" DID
+==============================
+== Apply for the loan with Thrift - Job-Certificate proving  ==
+------------------------------
+"Thrift" -> Create "Loan-Application-Basic" Proof Request
+"Thrift" -> Get key for Alice did
+"Thrift" -> Authcrypt "Loan-Application-Basic" Proof Request for Alice
+"Thrift" -> Send authcrypted "Loan-Application-Basic" Proof Request to Alice
+"Alice" -> Authdecrypt "Loan-Application-Basic" Proof Request from Thrift
+"Alice" -> Get credentials for "Loan-Application-Basic" Proof Request
+"Alice" -> Get Schema from Ledger
+"Alice" -> Get Claim Definition from Ledger
+"Alice" -> Create "Loan-Application-Basic" Proof
+"Alice" -> Authcrypt "Loan-Application-Basic" Proof for Thrift
+"Alice" -> Send authcrypted "Loan-Application-Basic" Proof to Thrift
+"Thrift" -> Authdecrypted "Loan-Application-Basic" Proof from Alice
+"Thrift" -> Get Schemas, Credential Definitions and Revocation Registries from Ledger required for Proof verifying
+"Thrift" -> Get Schema from Ledger
+"Thrift" -> Get Claim Definition from Ledger
+"Thrift" -> Verify "Loan-Application-Basic" Proof from Alice
+==============================
+==============================
+== Apply for the loan with Thrift - Transcript and Job-Certificate proving  ==
+------------------------------
+"Thrift" -> Create "Loan-Application-KYC" Proof Request
+"Thrift" -> Get key for Alice did
+"Thrift" -> Authcrypt "Loan-Application-KYC" Proof Request for Alice
+"Thrift" -> Send authcrypted "Loan-Application-KYC" Proof Request to Alice
+"Alice" -> Authdecrypt "Loan-Application-KYC" Proof Request from Thrift
+"Alice" -> Get credentials for "Loan-Application-KYC" Proof Request
+"Alice" -> Get Schema from Ledger
+"Alice" -> Get Claim Definition from Ledger
+"Alice" -> Get Schema from Ledger
+"Alice" -> Get Claim Definition from Ledger
+"Alice" -> Create "Loan-Application-KYC" Proof
+"Alice" -> Authcrypt "Loan-Application-KYC" Proof for Thrift
+"Alice" -> Send authcrypted "Loan-Application-KYC" Proof to Thrift
+"Thrift" -> Authdecrypted "Loan-Application-KYC" Proof from Alice
+"Thrift" -> Get Schemas, Credential Definitions and Revocation Registries from Ledger required for Proof verifying
+"Thrift" -> Get Schema from Ledger
+"Thrift" -> Get Claim Definition from Ledger
+"Thrift" -> Get Schema from Ledger
+"Thrift" -> Get Claim Definition from Ledger
+"Thrift" -> Verify "Loan-Application-KYC" Proof from Alice
+==============================
+ "Sovrin Steward" -> Close and Delete wallet
+"Government" -> Close and Delete wallet
+"Faber" -> Close and Delete wallet
+"Acme" -> Close and Delete wallet
+"Thrift" -> Close and Delete wallet
+"Alice" -> Close and Delete wallet
+Close and Delete pool
+Getting started -> done
