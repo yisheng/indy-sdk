@@ -332,5 +332,10 @@ async function getSchema(poolHandle, submitterDid, schemaId) {
 
 async function sendCredDef(poolHandle, walletHandle, submitterDid, credDef) {
     let request = await indy.buildCredDefRequest(submitterDid, credDef)
-    await indy.signAndSubmitRequest(poolHandle, walletHandle, submitterDid, request)
+    let requestResult = await indy.signAndSubmitRequest(poolHandle, walletHandle, submitterDid, request)
+    console.log({
+        requestResult: requestResult
+    })
+
+    return requestResult
 }
