@@ -293,6 +293,107 @@ async function run() {
         jobCertificateCredId: jobCertificateCredId
     })
 
+    console.log("\n=============================================")
+    console.log("=== Park-Daniel Onboarding ===\n")
+
+    let [parkDanielDid, parkDanielVerKey, danielParkDid, danielParkVerKey, parkDanielConnectionResponse] = await onboarding(poolHandle, 'Park', parkWallet, parkDid, 'Daniel', danielWallet)
+    console.log({
+        parkDanielDid: parkDanielDid,
+        parkDanielVerKey: parkDanielVerKey,
+        danielParkDid: danielParkDid,
+        danielParkVerKey: danielParkVerKey,
+        parkDanielConnectionResponse: parkDanielConnectionResponse
+    })
+
+    console.log("\n=============================================")
+    console.log("=== Job-Certificate Proving ===\n")
+
+    console.log('@Park -> Create "Park-Application" Proof Request')
+    let parkApplicationProofRequestJson = {
+        nonce: '1432422343242122312411212',
+        name: 'Park-Application',
+        version: '0.1',
+        requested_attributes: {
+            attr1_referent: {
+                name: 'first_name',
+                restrictions: [{
+                    cred_def_id: companyJobCertificateCredDefId // Issue: How to know?
+                }]
+            },
+            attr2_referent: {
+                name: 'last_name',
+                restrictions: [{
+                    cred_def_id: companyJobCertificateCredDefId
+                }]
+            },
+            attr3_referent: {
+                name: 'mobile'
+            },
+        },
+        requested_predicates: {
+        }
+    }
+    console.log({
+        parkApplicationProofRequestJson: parkApplicationProofRequestJson
+    })
+
+    console.log('@Park -> Authcrypt "Park-Application" Proof Request for Daniel')
+    let authcryptedJobApplicationProofRequestJson = await indy.cryptoAuthCrypt(parkWallet, parkDanielVerKey, danielParkVerKey, Buffer.from(JSON.stringify(parkApplicationProofRequestJson), 'utf8'))
+    console.log({
+        authcryptedJobApplicationProofRequestJson: authcryptedJobApplicationProofRequestJson
+    })
+
+    console.log('@Park -> Sending authcrypted "Job-Application" Proof Request to Daniel ......')
+
+    console.log('@Daniel -> ...... authcrypted "Job-Application" Proof Request received')
+
+    console.log('@Daniel -> Authdecrypt "Job-Application" Proof Request from Park')
+    let [parkDanielVerKey2, authdecryptedJobApplicationProofRequestJson, authdecryptedJobApplicationProofRequest] = await authDecrypt(danielWallet, danielParkVerKey, authcryptedJobApplicationProofRequestJson)
+    console.log({
+        parkDanielVerKey2: parkDanielVerKey2,
+        authdecryptedJobApplicationProofRequestJson: authdecryptedJobApplicationProofRequestJson,
+        authdecryptedJobApplicationProofRequest: authdecryptedJobApplicationProofRequest
+    })
+
+    console.log('@Daniel -> Get Credentials for "Job-Application" Proof Request')
+    let jobApplicationProofReqSearchHandle = await indy.proverSearchCredentialsForProofReq(danielWallet, authdecryptedJobApplicationProofRequestJson, null)
+    console.log({
+        jobApplicationProofReqSearchHandle: jobApplicationProofReqSearchHandle
+    })
+
+    let credentials = await indy.proverFetchCredentialsForProofReq(jobApplicationProofReqSearchHandle, 'attr1_referent', 100)
+    let credForAttr1 = credentials[0].cred_info
+    console.log({
+        credentials: credentials
+    })
+
+    await indy.proverFetchCredentialsForProofReq(jobApplicationProofReqSearchHandle, 'attr2_referent', 100)
+    let credForAttr2 = credentials[0].cred_info
+
+    await indy.proverFetchCredentialsForProofReq(jobApplicationProofReqSearchHandle, 'attr3_referent', 100)
+    let credForAttr3 = credentials[0].cred_info
+
+    await indy.proverCloseCredentialsSearchForProofReq(jobApplicationProofReqSearchHandle)
+
+    console.log({
+        credForAttr1: credForAttr1,
+        credForAttr2: credForAttr2,
+        credForAttr3: credForAttr3
+    })
+
+    let credsForJobApplicationProof = {}
+    credsForJobApplicationProof[`${credForAttr1.referent}`] = credForAttr1
+    credsForJobApplicationProof[`${credForAttr2.referent}`] = credForAttr2
+    credsForJobApplicationProof[`${credForAttr3.referent}`] = credForAttr3
+    console.log(credsForJobApplicationProof)
+
+
+
+
+
+
+
+
 
     console.log("\n=============================================")
     console.log("=== Cleanup ===\n")
