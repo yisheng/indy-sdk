@@ -183,14 +183,8 @@ async function run() {
         jobCertificateCredOfferJson: jobCertificateCredOfferJson
     })
 
-    console.log('@Company -> Get key for Daniel Did')
-    let danielCompanyVerkey2 = await indy.keyForDid(poolHandle, companyWallet, companyDanielConnectionResponse.did)
-    console.log({
-        danielCompanyVerkey2: danielCompanyVerkey2
-    })
-
     console.log('@Company -> Authcrypt "Job-Certificate" Credential Offer for Daniel')
-    let authcryptedJobCertificateCredOffer = await indy.cryptoAuthCrypt(companyWallet, companyDanielVerKey, danielCompanyVerkey2, Buffer.from(JSON.stringify(jobCertificateCredOfferJson), 'utf8'))
+    let authcryptedJobCertificateCredOffer = await indy.cryptoAuthCrypt(companyWallet, companyDanielVerKey, companyDanielConnectionResponse.verkey, Buffer.from(JSON.stringify(jobCertificateCredOfferJson), 'utf8'))
     console.log({
         authcryptedJobCertificateCredOffer: authcryptedJobCertificateCredOffer
     })
@@ -235,9 +229,9 @@ async function run() {
     console.log('@Company -> ...... authcrypted "Job-Certificate" Credential Request received')
 
     console.log('@Company -> Authdecrypt "Job-Certificate" Credential Request from Daniel')
-    let [danielCompanyVerkey3, authdecryptedJobCertificateCredRequestJson, authdecryptedJobCertificateCredRequest] = await authDecrypt(companyWallet, companyDanielVerKey, authcryptedJobCertificateCredRequest)
+    let [danielCompanyVerkey2, authdecryptedJobCertificateCredRequestJson, authdecryptedJobCertificateCredRequest] = await authDecrypt(companyWallet, companyDanielVerKey, authcryptedJobCertificateCredRequest)
     console.log({
-        danielCompanyVerkey3: danielCompanyVerkey3,
+        danielCompanyVerkey2: danielCompanyVerkey2,
         authdecryptedJobCertificateCredRequestJson: authdecryptedJobCertificateCredRequestJson,
         authdecryptedJobCertificateCredRequest: authdecryptedJobCertificateCredRequest
     })
@@ -276,7 +270,7 @@ async function run() {
     })
 
     console.log('@Company -> Authcrypt "Job-Certificate" Credential for Daniel')
-    let authcryptedJobCertificateCredJson = await indy.cryptoAuthCrypt(companyWallet, companyDanielVerKey, danielCompanyVerkey2, Buffer.from(JSON.stringify(jobCertificateCredJson), 'utf8'))
+    let authcryptedJobCertificateCredJson = await indy.cryptoAuthCrypt(companyWallet, companyDanielVerKey, companyDanielConnectionResponse.verkey, Buffer.from(JSON.stringify(jobCertificateCredJson), 'utf8'))
     console.log({
         authcryptedJobCertificateCredJson: authcryptedJobCertificateCredJson
     })
