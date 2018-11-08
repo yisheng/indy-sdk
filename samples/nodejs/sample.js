@@ -44,7 +44,21 @@ async function run() {
     })
 
     console.log("\n=============================================")
-    console.log("=== Park Onboarding And GetVerinym ===\n")
+    console.log("=== Daniel Setup ===\n")
+
+    console.log('@Daniel -> Create Wallet')
+    let danielWalletConfig = {'id': 'danielWallet'}
+    let danielWalletCredentials = {'key': 'daniel_key'}
+    let danielWallet = await createAndOpenWallet(danielWalletConfig, danielWalletCredentials)
+
+    console.log('@Daniel -> Create Master Scecret')
+    let danielMasterSecretId = await indy.proverCreateMasterSecret(danielWallet, null)
+    console.log({
+        danielMasterSecretId: danielMasterSecretId
+    })
+
+    console.log("\n=============================================")
+    console.log("=== Steward-Park Onboarding & Park GetVerinym ===\n")
     
     console.log('@Park -> Create Wallet')
     let parkWalletConfig = {'id': 'parkWallet'}
@@ -65,7 +79,7 @@ async function run() {
     })
 
     console.log("\n=============================================")
-    console.log("=== Company Onboarding And GetVerinym ===\n")
+    console.log("=== Steward-Company Onboarding & Company GetVerinym ===\n")
 
     console.log('@Company -> Create Wallet')
     let companyWalletConfig = {'id': 'companyWallet'}
@@ -149,18 +163,7 @@ async function run() {
     await sendCredDef(poolHandle, parkWallet, parkDid, parkParkCertificateCredDefJson)
 
     console.log("\n=============================================")
-    console.log("=== Daniel Onboarding ===\n")
-
-    console.log('@Daniel -> Create Wallet')
-    let danielWalletConfig = {'id': 'danielWallet'}
-    let danielWalletCredentials = {'key': 'daniel_key'}
-    let danielWallet = await createAndOpenWallet(danielWalletConfig, danielWalletCredentials)
-
-    console.log('@Daniel -> Create Master Scecret')
-    let danielMasterSecretId = await indy.proverCreateMasterSecret(danielWallet, null)
-    console.log({
-        danielMasterSecretId: danielMasterSecretId
-    })
+    console.log("=== Company-Daniel Onboarding ===\n")
 
     let [companyDanielDid, companyDanielVerKey, danielCompanyDid, danielCompanyVerkey, danielCompanyConnectionResponse] = await onboarding(poolHandle, 'Company', companyWallet, companyDid, 'Daniel', danielWallet)
     console.log({
