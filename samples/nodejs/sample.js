@@ -28,12 +28,12 @@ async function run() {
     console.log("\n=============================================")
     console.log("=== Steward Setup ===\n")
 
-    console.log('Steward -> Create Wallet')
+    console.log('@Steward -> Create Wallet')
     let stewardWalletConfig = {'id': 'stewardWalletName'}
     let stewardWalletCredentials = {'key': 'steward_key'}
     let stewardWallet = await createAndOpenWallet(stewardWalletConfig, stewardWalletCredentials)
 
-    console.log('Steward -> Create DID')
+    console.log('@Steward -> Create DID')
     let stewardDidInfo = {
         'seed': '000000000000000000000000Steward1'
     }
@@ -46,7 +46,7 @@ async function run() {
     console.log("\n=============================================")
     console.log("=== Park Onboarding And GetVerinym ===\n")
     
-    console.log('Park -> Create Wallet')
+    console.log('@Park -> Create Wallet')
     let parkWalletConfig = {'id': 'parkWallet'}
     let parkWalletCredentials = {'key': 'park_key'}
     let parkWallet = await createAndOpenWallet(parkWalletConfig, parkWalletCredentials)
@@ -67,7 +67,7 @@ async function run() {
     console.log("\n=============================================")
     console.log("=== Company Onboarding And GetVerinym ===\n")
 
-    console.log('Company -> Create Wallet')
+    console.log('@Company -> Create Wallet')
     let companyWalletConfig = {'id': 'companyWallet'}
     let companyWalletCredentials = {'key': 'company_key'}
     let companyWallet = await createAndOpenWallet(companyWalletConfig, companyWalletCredentials)
@@ -88,75 +88,75 @@ async function run() {
     console.log("\n=============================================")
     console.log("=== Credential Schemas Setup ===\n")
 
-    console.log('Steward -> Create "Job-Certificate" Schema')
+    console.log('@Steward -> Create "Job-Certificate" Schema')
     let [jobCertificateSchemaId, jobCertificateSchema] = await indy.issuerCreateSchema(stewardDid, 'Job-Certificate', '0.1', ['first_name', 'last_name', 'salary', 'status', 'experience'])
     console.log({
         jobCertificateSchemaId: jobCertificateSchemaId,
         jobCertificateSchema: jobCertificateSchema
     })
 
-    console.log('Steward -> Send "Job-Certificate" Schema to Ledger')
+    console.log('@Steward -> Send "Job-Certificate" Schema to Ledger')
     await sendSchema(poolHandle, stewardWallet, stewardDid, jobCertificateSchema)
 
-    console.log('Steward -> Create "Park-Certificate" Schema')
+    console.log('@Steward -> Create "Park-Certificate" Schema')
     let [parkCertificateSchemaId, parkCertificateSchema] = await indy.issuerCreateSchema(stewardDid, 'Park-Certificate', '0.1', ['first_name', 'last_name', 'status', 'level'])
     console.log({
         parkCertificateSchemaId: parkCertificateSchemaId,
         parkCertificateSchema, parkCertificateSchema
     })
 
-    console.log('Steward -> Send "Park-Certificate" Schema to Ledger')
+    console.log('@Steward -> Send "Park-Certificate" Schema to Ledger')
     await sendSchema(poolHandle, stewardWallet, stewardDid, parkCertificateSchema)
 
     console.log("\n=============================================")
     console.log("=== Company Credential Definition Setup ===\n")
 
-    console.log('Company -> Get "Job-Certificate" Schema from Ledger')
+    console.log('@Company -> Get "Job-Certificate" Schema from Ledger')
     let [theJobCertificateSchemaId, theJobCertificateSchema] = await getSchema(poolHandle, companyDid, jobCertificateSchemaId)
     console.log({
         theJobCertificateSchemaId: theJobCertificateSchemaId,
         theJobCertificateSchema: theJobCertificateSchema
     })
 
-    console.log('Company -> Create and store "Company Job-Certificate" Credential Definition')
+    console.log('@Company -> Create and store "Company Job-Certificate" Credential Definition')
     let [companyJobCertificateCredDefId, companyJobCertificateCredDefJson] = await indy.issuerCreateAndStoreCredentialDef(companyWallet, companyDid, theJobCertificateSchema, 'TAG1', 'CL', '{"support_revocation": false}')
     console.log({
         companyJobCertificateCredDefId: companyJobCertificateCredDefId,
         companyJobCertificateCredDefJson: companyJobCertificateCredDefJson
     })
 
-    console.log('Company -> Send "Company Job-Certificate" Credential Definition to Ledger')
+    console.log('@Company -> Send "Company Job-Certificate" Credential Definition to Ledger')
     await sendCredDef(poolHandle, companyWallet, companyDid, companyJobCertificateCredDefJson)
 
     console.log("\n=============================================")
     console.log("=== Park Credential Definition Setup ===\n")
 
-    console.log('Park -> Get "Park-Certificate" Schema from Ledger')
+    console.log('@Park -> Get "Park-Certificate" Schema from Ledger')
     let [theParkCertificateSchemaId, theParkCertificateSchema] = await getSchema(poolHandle, parkDid, parkCertificateSchemaId)
     console.log({
         theParkCertificateSchemaId, theParkCertificateSchemaId,
         theParkCertificateSchema: theParkCertificateSchema
     })
 
-    console.log('Park -> Create and store "Park Park-Certificate" Credential Definition')
+    console.log('@Park -> Create and store "Park Park-Certificate" Credential Definition')
     let [parkParkCertificateCredDefId, parkParkCertificateCredDefJson] = await indy.issuerCreateAndStoreCredentialDef(parkWallet, parkDid, theParkCertificateSchema, 'TAG1', 'CL', '{"support_revocation": false}')
     console.log({
         parkParkCertificateCredDefId: parkParkCertificateCredDefId,
         parkParkCertificateCredDefJson: parkParkCertificateCredDefJson
     })
 
-    console.log('Park -> Send "Park Park-Certificate" Credential Definition to Ledger')
+    console.log('@Park -> Send "Park Park-Certificate" Credential Definition to Ledger')
     await sendCredDef(poolHandle, parkWallet, parkDid, parkParkCertificateCredDefJson)
 
     console.log("\n=============================================")
     console.log("=== Daniel Onboarding ===\n")
 
-    console.log('Daniel -> Create Wallet')
+    console.log('@Daniel -> Create Wallet')
     let danielWalletConfig = {'id': 'danielWallet'}
     let danielWalletCredentials = {'key': 'daniel_key'}
     let danielWallet = await createAndOpenWallet(danielWalletConfig, danielWalletCredentials)
 
-    console.log('Daniel -> Create Master Scecret')
+    console.log('@Daniel -> Create Master Scecret')
     let danielMasterSecretId = await indy.proverCreateMasterSecret(danielWallet, null)
     console.log({
         danielMasterSecretId: danielMasterSecretId
@@ -174,29 +174,29 @@ async function run() {
     console.log("\n=============================================")
     console.log("=== Company Sending Job-Certificate Credential Offer ===\n")
 
-    console.log('Company -> Create \"Job-Certificate\" Credential Offer for Daniel')
+    console.log('@Company -> Create \"Job-Certificate\" Credential Offer for Daniel')
     let jobCertificateCredOfferJson = await indy.issuerCreateCredentialOffer(companyWallet, companyJobCertificateCredDefId)
     console.log({
         jobCertificateCredOfferJson: jobCertificateCredOfferJson
     })
 
-    console.log('Company -> Get key for Daniel Did')
+    console.log('@Company -> Get key for Daniel Did')
     let danielCompanyVerkey2 = await indy.keyForDid(poolHandle, companyWallet, danielCompanyConnectionResponse.did)
     console.log({
         danielCompanyVerkey2: danielCompanyVerkey2
     })
 
-    console.log('Company -> Authcrypt "Job-Certificate" Credential Offer for Daniel')
+    console.log('@Company -> Authcrypt "Job-Certificate" Credential Offer for Daniel')
     let authcryptedJobCertificateCredOffer = await indy.cryptoAuthCrypt(companyWallet, companyDanielVerKey, danielCompanyVerkey2, Buffer.from(JSON.stringify(jobCertificateCredOfferJson), 'utf8'))
     console.log({
         authcryptedJobCertificateCredOffer: authcryptedJobCertificateCredOffer
     })
 
-    console.log('Company -> Sending authcrypted "Job-Certificate" Credential Offer to Daniel ......')
+    console.log('@Company -> Sending authcrypted "Job-Certificate" Credential Offer to Daniel ......')
 
-    console.log('Daniel -> ...... authcrypted "Job-Certificate" Credential Offer received')
+    console.log('@Daniel -> ...... authcrypted "Job-Certificate" Credential Offer received')
 
-    console.log('Daniel -> Authdecrypt "Job-Certificate" Credential Offer from Company')
+    console.log('@Daniel -> Authdecrypt "Job-Certificate" Credential Offer from Company')
     let [companyDanielVerKey2, authdecryptedJobCertificateCredOfferJson, authdecryptedJobCertificateCredOffer] = await authDecrypt(danielWallet, danielCompanyVerkey, authcryptedJobCertificateCredOffer)
     console.log({
         companyDanielVerKey2: companyDanielVerKey2,
@@ -207,31 +207,31 @@ async function run() {
     console.log("\n=============================================")
     console.log("=== Daniel Getting Job-Certificate Credential ===\n")
 
-    console.log('Daniel -> Get "Company Job-Certificate" Credential Definition from Ledger')
+    console.log('@Daniel -> Get "Company Job-Certificate" Credential Definition from Ledger')
     let [theCompanyJobCertificateCredDefId, theCompanyJobCertificateCredDefJson] = await getCredDef(poolHandle, danielCompanyDid, authdecryptedJobCertificateCredOffer.cred_def_id)
     console.log({
         theCompanyJobCertificateCredDefId: theCompanyJobCertificateCredDefId,
         theCompanyJobCertificateCredDefJson: theCompanyJobCertificateCredDefJson
     })
 
-    console.log('Daniel -> Create "Job-Certificate" Credential Request for Company')
+    console.log('@Daniel -> Create "Job-Certificate" Credential Request for Company')
     let [jobCertificateCredRequestJson, jobCertificateCredRequestMetadataJson] = await indy.proverCreateCredentialReq(danielWallet, danielCompanyDid, authdecryptedJobCertificateCredOfferJson, theCompanyJobCertificateCredDefJson, danielMasterSecretId)
     console.log({
         jobCertificateCredRequestJson: jobCertificateCredRequestJson,
         jobCertificateCredRequestMetadataJson: jobCertificateCredRequestMetadataJson
     })
 
-    console.log('Daniel -> Authcrypt "Job-Certificate" Credential Request for Company')
+    console.log('@Daniel -> Authcrypt "Job-Certificate" Credential Request for Company')
     let authcryptedJobCertificateCredRequest = await indy.cryptoAuthCrypt(danielWallet, danielCompanyVerkey, companyDanielVerKey2, Buffer.from(JSON.stringify(jobCertificateCredRequestJson), 'utf8'))
     console.log({
         authcryptedJobCertificateCredRequest: authcryptedJobCertificateCredRequest
     })
 
-    console.log('Daniel -> Sending authcrypted "Job-Certificate" Credential Request to Company ......')
+    console.log('@Daniel -> Sending authcrypted "Job-Certificate" Credential Request to Company ......')
 
-    console.log('Company -> ...... authcrypted "Job-Certificate" Credential Request received')
+    console.log('@Company -> ...... authcrypted "Job-Certificate" Credential Request received')
 
-    console.log('Company -> Authdecrypt "Job-Certificate" Credential Request from Daniel')
+    console.log('@Company -> Authdecrypt "Job-Certificate" Credential Request from Daniel')
     let [danielCompanyVerkey3, authdecryptedJobCertificateCredRequestJson, authdecryptedJobCertificateCredRequest] = await authDecrypt(companyWallet, companyDanielVerKey, authcryptedJobCertificateCredRequest)
     console.log({
         danielCompanyVerkey3: danielCompanyVerkey3,
@@ -239,7 +239,7 @@ async function run() {
         authdecryptedJobCertificateCredRequest: authdecryptedJobCertificateCredRequest
     })
 
-    console.log('Company -> Create "Job-Certificate" Credential for Daniel')
+    console.log('@Company -> Create "Job-Certificate" Credential for Daniel')
     let jobCertificateCredValues = {
         first_name: {
             raw: 'Alice',
@@ -272,17 +272,17 @@ async function run() {
         jobCertificateCredRevocRegDeltaJson: jobCertificateCredRevocRegDeltaJson
     })
 
-    console.log('Company -> Authcrypt "Job-Certificate" Credential for Daniel')
+    console.log('@Company -> Authcrypt "Job-Certificate" Credential for Daniel')
     let authcryptedJobCertificateCredJson = await indy.cryptoAuthCrypt(companyWallet, companyDanielVerKey, danielCompanyVerkey2, Buffer.from(JSON.stringify(jobCertificateCredJson), 'utf8'))
     console.log({
         authcryptedJobCertificateCredJson: authcryptedJobCertificateCredJson
     })
 
-    console.log('Company -> Sending authcrypted "Job-Certificate" Credential to Daniel ......')
+    console.log('@Company -> Sending authcrypted "Job-Certificate" Credential to Daniel ......')
 
-    console.log('Daniel -> ...... authcrypted "Job-Certificate" Credential received')
+    console.log('@Daniel -> ...... authcrypted "Job-Certificate" Credential received')
 
-    console.log('Daniel -> Authdecrypt "Job-Certificate" Credential from Company')
+    console.log('@Daniel -> Authdecrypt "Job-Certificate" Credential from Company')
     let [companyDanielVerKey3, authdecryptedJobCertificateCredJson, authdecryptedJobCertificateCred] = await authDecrypt(danielWallet, danielCompanyVerkey, authcryptedJobCertificateCredJson)
     console.log({
         companyDanielVerKey3: companyDanielVerKey3,
@@ -290,7 +290,7 @@ async function run() {
         authdecryptedJobCertificateCred: authdecryptedJobCertificateCred
     })
 
-    console.log('Daniel -> Store "Job-Certificate" Credential from Company')
+    console.log('@Daniel -> Store "Job-Certificate" Credential from Company')
     let jobCertificateCredId = await indy.proverStoreCredential(danielWallet, null, jobCertificateCredRequestMetadataJson, authdecryptedJobCertificateCredJson, theCompanyJobCertificateCredDefJson, null)
     console.log({
         jobCertificateCredId: jobCertificateCredId
@@ -300,19 +300,19 @@ async function run() {
     console.log("\n=============================================")
     console.log("=== Cleanup ===\n")
 
-    console.log('Steward -> Close and Delete Wallet')
+    console.log('@Steward -> Close and Delete Wallet')
     await indy.closeWallet(stewardWallet)
     await indy.deleteWallet(stewardWalletConfig, stewardWalletCredentials)
 
-    console.log('Park -> Close and Delete Wallet')
+    console.log('@Park -> Close and Delete Wallet')
     await indy.closeWallet(parkWallet)
     await indy.deleteWallet(parkWalletConfig, parkWalletCredentials)
 
-    console.log('Company -> Close and Delete Wallet')
+    console.log('@Company -> Close and Delete Wallet')
     await indy.closeWallet(companyWallet)
     await indy.deleteWallet(companyWalletConfig, companyWalletCredentials)
 
-    console.log('Daniel -> Close and Delete Wallet')
+    console.log('@Daniel -> Close and Delete Wallet')
     await indy.closeWallet(danielWallet)
     await indy.deleteWallet(danielWalletConfig, danielWalletCredentials)
 
@@ -336,17 +336,17 @@ async function createAndOpenWallet(config, credentials) {
 async function onboarding(poolHandle, from, fromWallet, fromDid, to, toWallet) {
     console.log("\n*** onboarding ***\n")
 
-    console.log(`${from} -> Create DID \"${from} ${to}\"`)
+    console.log(`@${from} -> Create DID \"${from} ${to}\"`)
     let [fromToDid, fromToVerKey] = await indy.createAndStoreMyDid(fromWallet, {})
     console.log({
         fromToDid: fromToDid,
         fromToVerKey: fromToVerKey
     })
 
-    console.log(`${from} -> Send Nym to Ledger for \"${from} ${to}\" DID`)
+    console.log(`@${from} -> Send Nym to Ledger for \"${from} ${to}\" DID`)
     await sendNym(poolHandle, fromWallet, fromDid, fromToDid, fromToVerKey, null)
 
-    console.log(`${from} -> Send connection request to ${to} with \"${from} ${to}\" DID and nonce`)
+    console.log(`@${from} -> Send connection request to ${to} with \"${from} ${to}\" DID and nonce`)
     let connectionRequest = {
         did: fromToDid,
         nonce: 123456
@@ -355,24 +355,24 @@ async function onboarding(poolHandle, from, fromWallet, fromDid, to, toWallet) {
         connectionRequest: connectionRequest
     })
 
-    console.log(`${from} -> Sending request ......`)
+    console.log(`@${from} -> Sending request ......`)
 
-    console.log(`${to} -> ...... request received`)
+    console.log(`@${to} -> ...... request received`)
 
-    console.log(`${to} -> Create DID \"${to} ${from}\"`)
+    console.log(`@${to} -> Create DID \"${to} ${from}\"`)
     let [toFromDid, toFromVerKey] = await indy.createAndStoreMyDid(toWallet, {})
     console.log({
         toFromDid: toFromDid,
         toFromVerKey: toFromVerKey
     })
 
-    console.log(`${to} -> Get VerKey for Did from \"${from}\"'s connection request`)
+    console.log(`@${to} -> Get VerKey for Did from \"${from}\"'s connection request`)
     let fromToVerKey2 = await indy.keyForDid(poolHandle, toWallet, connectionRequest.did)
     console.log({
         fromToVerKey2: fromToVerKey2
     })
 
-    console.log(`${to} -> Anoncrypt connection response for \"${from}\" with \"${to} ${from}\" DID, verkey and nonce`)
+    console.log(`@${to} -> Anoncrypt connection response for \"${from}\" with \"${to} ${from}\" DID, verkey and nonce`)
     let connectionResponse = JSON.stringify({
         did: toFromDid,
         verkey: toFromVerKey,
@@ -384,22 +384,22 @@ async function onboarding(poolHandle, from, fromWallet, fromDid, to, toWallet) {
         anoncryptedConnectionResponse: anoncryptedConnectionResponse
     })
 
-    console.log(`${to} -> Sending anoncrypted connection response to \"${from}\" ......`)
+    console.log(`@${to} -> Sending anoncrypted connection response to \"${from}\" ......`)
 
-    console.log(`${from} -> ...... response received`)
+    console.log(`@${from} -> ...... response received`)
 
-    console.log(`${from} -> Anondecrypt connection response from \"${to}\"`)
+    console.log(`@${from} -> Anondecrypt connection response from \"${to}\"`)
     let decryptedConnectionResponse = JSON.parse(Buffer.from(await indy.cryptoAnonDecrypt(fromWallet, fromToVerKey, anoncryptedConnectionResponse)))
     console.log({
         decryptedConnectionResponse: decryptedConnectionResponse
     })
 
-    console.log(`${from} -> Authenticates \"${to}\" by comparision of none`)
+    console.log(`@${from} -> Authenticates \"${to}\" by comparision of none`)
     if (connectionRequest.nonce !== decryptedConnectionResponse.nonce) {
         throw Error('nonces do not match')
     }
 
-    console.log(`${from} -> Send Nym to Ledger for \"${to} ${from}\" DID`)
+    console.log(`@${from} -> Send Nym to Ledger for \"${to} ${from}\" DID`)
     await sendNym(poolHandle, fromWallet, fromDid, decryptedConnectionResponse.did, decryptedConnectionResponse.verkey)
 
     return [fromToDid, fromToVerKey, toFromDid, toFromVerKey, decryptedConnectionResponse]
@@ -408,14 +408,14 @@ async function onboarding(poolHandle, from, fromWallet, fromDid, to, toWallet) {
 async function getVerinym(poolHandle, from, fromWallet, fromDid, fromToVerKey, to, toWallet, toFromDid, toFromVerKey, role) {
     console.log("\n*** getVerinym ***\n")
     
-    console.log(`${to} -> Create DID`)
+    console.log(`@${to} -> Create DID`)
     let [toDid, toVerKey] = await indy.createAndStoreMyDid(toWallet, {})
     console.log({
         toDid: toDid,
         toVerKey: toVerKey
     })
 
-    console.log(`${to} -> Authcrypt \"${to}\" DID info for \"${from}\"`)
+    console.log(`@${to} -> Authcrypt \"${to}\" DID info for \"${from}\"`)
     let didInfoJson = JSON.stringify({
         did: toDid,
         verkey: toVerKey
@@ -426,11 +426,11 @@ async function getVerinym(poolHandle, from, fromWallet, fromDid, fromToVerKey, t
         authcryptedDidInfo: authcryptedDidInfo
     })
 
-    console.log(`${to} -> Sending authcrypted \"${to}\" DID info to \"${from}\" ......`)
+    console.log(`@${to} -> Sending authcrypted \"${to}\" DID info to \"${from}\" ......`)
 
-    console.log(`${from} -> ...... DID info received`)
+    console.log(`@${from} -> ...... DID info received`)
 
-    console.log(`${from} -> Authdecrypt \"${to}\" DID info from \"${to}\"`)
+    console.log(`@${from} -> Authdecrypt \"${to}\" DID info from \"${to}\"`)
     let [senderVerKey, authdecryptedDidInfo] = await indy.cryptoAuthDecrypt(fromWallet, fromToVerKey, Buffer.from(authcryptedDidInfo))
     let authdecryptedDidInfoJson = JSON.parse(Buffer.from(authdecryptedDidInfo))
     console.log({
@@ -439,7 +439,7 @@ async function getVerinym(poolHandle, from, fromWallet, fromDid, fromToVerKey, t
         authdecryptedDidInfoJson: authdecryptedDidInfoJson
     })
 
-    console.log(`${from} -> Authenticates \"${to}\" by comparison of Verkeys`)
+    console.log(`@${from} -> Authenticates \"${to}\" by comparison of Verkeys`)
     let retrievedVerKey = await indy.keyForDid(poolHandle, fromWallet, toFromDid)
     console.log({
         retrievedVerKey: retrievedVerKey
@@ -448,7 +448,7 @@ async function getVerinym(poolHandle, from, fromWallet, fromDid, fromToVerKey, t
         throw Error('Verkey is not the same')
     }
 
-    console.log(`${from} -> Send Nym to Ledger for \"${to}\" DID with ${role} Role`)
+    console.log(`@${from} -> Send Nym to Ledger for \"${to}\" DID with ${role} Role`)
     await sendNym(poolHandle, fromWallet, fromDid, authdecryptedDidInfoJson.did, authdecryptedDidInfoJson.verkey, role)
 
     return toDid
