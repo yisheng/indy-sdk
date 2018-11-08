@@ -165,13 +165,13 @@ async function run() {
     console.log("\n=============================================")
     console.log("=== Company-Daniel Onboarding ===\n")
 
-    let [companyDanielDid, companyDanielVerKey, danielCompanyDid, danielCompanyVerkey, danielCompanyConnectionResponse] = await onboarding(poolHandle, 'Company', companyWallet, companyDid, 'Daniel', danielWallet)
+    let [companyDanielDid, companyDanielVerKey, danielCompanyDid, danielCompanyVerkey, companyDanielConnectionResponse] = await onboarding(poolHandle, 'Company', companyWallet, companyDid, 'Daniel', danielWallet)
     console.log({
         companyDanielDid: companyDanielDid,
         companyDanielVerKey: companyDanielVerKey,
         danielCompanyDid: danielCompanyDid,
         danielCompanyVerkey: danielCompanyVerkey,
-        danielCompanyConnectionResponse: danielCompanyConnectionResponse
+        companyDanielConnectionResponse: companyDanielConnectionResponse
     })
 
     console.log("\n=============================================")
@@ -184,7 +184,7 @@ async function run() {
     })
 
     console.log('@Company -> Get key for Daniel Did')
-    let danielCompanyVerkey2 = await indy.keyForDid(poolHandle, companyWallet, danielCompanyConnectionResponse.did)
+    let danielCompanyVerkey2 = await indy.keyForDid(poolHandle, companyWallet, companyDanielConnectionResponse.did)
     console.log({
         danielCompanyVerkey2: danielCompanyVerkey2
     })
