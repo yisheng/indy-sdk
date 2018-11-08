@@ -204,7 +204,97 @@ async function run() {
         authdecryptedJobCertificateCredOffer: authdecryptedJobCertificateCredOffer
     })
 
-    
+    console.log("\n=============================================")
+    console.log("=== Daniel Getting Job-Certificate Credential ===\n")
+
+    console.log('Daniel -> Get "Company Job-Certificate" Credential Definition from Ledger')
+    let [theCompanyJobCertificateCredDefId, theCompanyJobCertificateCredDefJson] = await getCredDef(poolHandle, danielCompanyDid, authdecryptedJobCertificateCredOffer.cred_def_id)
+    console.log({
+        theCompanyJobCertificateCredDefId: theCompanyJobCertificateCredDefId,
+        theCompanyJobCertificateCredDefJson: theCompanyJobCertificateCredDefJson
+    })
+
+    console.log('Daniel -> Create "Job-Certificate" Credential Request for Company')
+    let [jobCertificateCredRequestJson, jobCertificateCredRequestMetadataJson] = await indy.proverCreateCredentialReq(danielWallet, danielCompanyDid, authdecryptedJobCertificateCredOfferJson, theCompanyJobCertificateCredDefJson, danielMasterSecretId)
+    console.log({
+        jobCertificateCredRequestJson: jobCertificateCredRequestJson,
+        jobCertificateCredRequestMetadataJson: jobCertificateCredRequestMetadataJson
+    })
+
+    console.log('Daniel -> Authcrypt "Job-Certificate" Credential Request for Company')
+    let authcryptedJobCertificateCredRequest = await indy.cryptoAuthCrypt(danielWallet, danielCompanyVerkey, companyDanielVerKey2, Buffer.from(JSON.stringify(jobCertificateCredRequestJson), 'utf8'))
+    console.log({
+        authcryptedJobCertificateCredRequest: authcryptedJobCertificateCredRequest
+    })
+
+    console.log('Daniel -> Sending authcrypted "Job-Certificate" Credential Request to Company ......')
+
+    console.log('Company -> ...... authcrypted "Job-Certificate" Credential Request received')
+
+    console.log('Company -> Authdecrypt "Job-Certificate" Credential Request from Daniel')
+    let [danielCompanyVerkey3, authdecryptedJobCertificateCredRequestJson, authdecryptedJobCertificateCredRequest] = await authDecrypt(companyWallet, companyDanielVerKey, authcryptedJobCertificateCredRequest)
+    console.log({
+        danielCompanyVerkey3: danielCompanyVerkey3,
+        authdecryptedJobCertificateCredRequestJson: authdecryptedJobCertificateCredRequestJson,
+        authdecryptedJobCertificateCredRequest: authdecryptedJobCertificateCredRequest
+    })
+
+    console.log('Company -> Create "Job-Certificate" Credential for Daniel')
+    let jobCertificateCredValues = {
+        first_name: {
+            raw: 'Alice',
+            encoded: '245712572474217942457235975012103335'
+        },
+        last_name: {
+            raw: 'Garcia',
+            encoded: '312643218496194691632153761283356127'
+        },
+        salary: {
+            raw: '2400',
+            encoded: '2400'
+        },
+        status: {
+            raw: 'Permanent',
+            encoded: '2143135425425143112321314321'
+        },
+        experience: {
+            raw: '10',
+            encoded: '10'
+        }
+    }
+    console.log({
+        jobCertificateCredValues: jobCertificateCredValues
+    })
+    let [jobCertificateCredJson, jobCertificateCredRevocId, jobCertificateCredRevocRegDeltaJson] = await indy.issuerCreateCredential(companyWallet, jobCertificateCredOfferJson, authdecryptedJobCertificateCredRequestJson, jobCertificateCredValues, null, -1)
+    console.log({
+        jobCertificateCredJson: jobCertificateCredJson,
+        jobCertificateCredRevocId: jobCertificateCredRevocId,
+        jobCertificateCredRevocRegDeltaJson: jobCertificateCredRevocRegDeltaJson
+    })
+
+    console.log('Company -> Authcrypt "Job-Certificate" Credential for Daniel')
+    let authcryptedJobCertificateCredJson = await indy.cryptoAuthCrypt(companyWallet, companyDanielVerKey, danielCompanyVerkey2, Buffer.from(JSON.stringify(jobCertificateCredJson), 'utf8'))
+    console.log({
+        authcryptedJobCertificateCredJson: authcryptedJobCertificateCredJson
+    })
+
+    console.log('Company -> Sending authcrypted "Job-Certificate" Credential to Daniel ......')
+
+    console.log('Daniel -> ...... authcrypted "Job-Certificate" Credential received')
+
+    console.log('Daniel -> Authdecrypt "Job-Certificate" Credential from Company')
+    let [companyDanielVerKey3, authdecryptedJobCertificateCredJson, authdecryptedJobCertificateCred] = await authDecrypt(danielWallet, danielCompanyVerkey, authcryptedJobCertificateCredJson)
+    console.log({
+        companyDanielVerKey3: companyDanielVerKey3,
+        authdecryptedJobCertificateCredJson: authdecryptedJobCertificateCredJson,
+        authdecryptedJobCertificateCred: authdecryptedJobCertificateCred
+    })
+
+    console.log('Daniel -> Store "Job-Certificate" Credential from Company')
+    let jobCertificateCredId = await indy.proverStoreCredential(danielWallet, null, jobCertificateCredRequestMetadataJson, authdecryptedJobCertificateCredJson, theCompanyJobCertificateCredDefJson, null)
+    console.log({
+        jobCertificateCredId: jobCertificateCredId
+    })
 
 
     console.log("\n=============================================")
@@ -390,8 +480,18 @@ async function getSchema(poolHandle, submitterDid, schemaId) {
     console.log({
         requestResult: requestResult
     })
-    
+
     return await indy.parseGetSchemaResponse(requestResult)
+}
+
+async function getCredDef(poolHandle, submitterDid, credDefId) {
+    let request = await indy.buildGetCredDefRequest(submitterDid, credDefId)
+    let requestResult = await indy.submitRequest(poolHandle, request)
+    console.log({
+        requestResult: requestResult
+    })
+
+    return await indy.parseGetCredDefResponse(requestResult)
 }
 
 async function sendCredDef(poolHandle, walletHandle, submitterDid, credDef) {
@@ -410,8 +510,4 @@ async function authDecrypt(walletHandle, recipientVerKey, encryptedMessageRaw) {
     let decryptedMessageJson = JSON.stringify(decryptedMessage)
 
     return [senderVerKey, decryptedMessageJson, decryptedMessage]
-}
-
-async function getCredDef() {
-
 }
