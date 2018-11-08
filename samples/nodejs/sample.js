@@ -113,7 +113,7 @@ async function run() {
     await sendSchema(poolHandle, stewardWallet, stewardDid, jobCertificateSchema)
 
     console.log('@Steward -> Create "Park-Certificate" Schema')
-    let [parkCertificateSchemaId, parkCertificateSchema] = await indy.issuerCreateSchema(stewardDid, 'Park-Certificate', '0.1', ['first_name', 'last_name', 'status', 'level'])
+    let [parkCertificateSchemaId, parkCertificateSchema] = await indy.issuerCreateSchema(stewardDid, 'Park-Certificate', '0.1', ['first_name', 'last_name', 'level'])
     console.log({
         parkCertificateSchemaId: parkCertificateSchemaId,
         parkCertificateSchema, parkCertificateSchema
