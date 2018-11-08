@@ -156,13 +156,13 @@ async function run() {
     let danielWalletCredentials = {'key': 'daniel_key'}
     let danielWallet = await createAndOpenWallet(danielWalletConfig, danielWalletCredentials)
 
-    let [companyDanielDid, companyDanielVerKey, danielCompanyDid, danielCompanyVerkey, companyDanielConnectionResponse] = await onboarding(poolHandle, 'Company', companyWallet, companyDid, 'Daniel', danielWallet)
+    let [companyDanielDid, companyDanielVerKey, danielCompanyDid, danielCompanyVerkey, danielCompanyConnectionResponse] = await onboarding(poolHandle, 'Company', companyWallet, companyDid, 'Daniel', danielWallet)
     console.log({
         companyDanielDid: companyDanielDid,
         companyDanielVerKey: companyDanielVerKey,
         danielCompanyDid: danielCompanyDid,
         danielCompanyVerkey: danielCompanyVerkey,
-        companyDanielConnectionResponse: companyDanielConnectionResponse
+        danielCompanyConnectionResponse: danielCompanyConnectionResponse
     })
 
 
