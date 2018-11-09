@@ -133,14 +133,14 @@ async function run() {
     })
 
     console.log('@Company -> Create and store "Company Job-Certificate" Credential Definition')
-    let [companyJobCertificateCredDefId, companyJobCertificateCredDefJson] = await indy.issuerCreateAndStoreCredentialDef(companyWallet, companyDid, theJobCertificateSchema, 'TAG1', 'CL', '{"support_revocation": false}')
+    let [companyJobCertificateCredDefId, companyJobCertificateCredDef] = await indy.issuerCreateAndStoreCredentialDef(companyWallet, companyDid, theJobCertificateSchema, 'TAG1', 'CL', '{"support_revocation": false}')
     console.log({
         companyJobCertificateCredDefId: companyJobCertificateCredDefId,
-        companyJobCertificateCredDefJson: companyJobCertificateCredDefJson
+        companyJobCertificateCredDef: companyJobCertificateCredDef
     })
 
     console.log('@Company -> Send "Company Job-Certificate" Credential Definition to Ledger')
-    await sendCredDef(poolHandle, companyWallet, companyDid, companyJobCertificateCredDefJson)
+    await sendCredDef(poolHandle, companyWallet, companyDid, companyJobCertificateCredDef)
 
     console.log("\n=============================================")
     console.log("=== Park Credential Definition Setup ===\n")
@@ -153,14 +153,14 @@ async function run() {
     })
 
     console.log('@Park -> Create and store "Park Park-Certificate" Credential Definition')
-    let [parkParkCertificateCredDefId, parkParkCertificateCredDefJson] = await indy.issuerCreateAndStoreCredentialDef(parkWallet, parkDid, theParkCertificateSchema, 'TAG1', 'CL', '{"support_revocation": false}')
+    let [parkParkCertificateCredDefId, parkParkCertificateCredDef] = await indy.issuerCreateAndStoreCredentialDef(parkWallet, parkDid, theParkCertificateSchema, 'TAG1', 'CL', '{"support_revocation": false}')
     console.log({
         parkParkCertificateCredDefId: parkParkCertificateCredDefId,
-        parkParkCertificateCredDefJson: parkParkCertificateCredDefJson
+        parkParkCertificateCredDef: parkParkCertificateCredDef
     })
 
     console.log('@Park -> Send "Park Park-Certificate" Credential Definition to Ledger')
-    await sendCredDef(poolHandle, parkWallet, parkDid, parkParkCertificateCredDefJson)
+    await sendCredDef(poolHandle, parkWallet, parkDid, parkParkCertificateCredDef)
 
     console.log("\n=============================================")
     console.log("=== Company-Daniel Onboarding ===\n")
@@ -178,15 +178,15 @@ async function run() {
     console.log("=== Company Sending Job-Certificate Credential Offer ===\n")
 
     console.log('@Company -> Create \"Job-Certificate\" Credential Offer for Daniel')
-    let jobCertificateCredOfferJson = await indy.issuerCreateCredentialOffer(companyWallet, companyJobCertificateCredDefId)
+    let jobCertificateCredOffer = await indy.issuerCreateCredentialOffer(companyWallet, companyJobCertificateCredDefId)
     console.log({
-        jobCertificateCredOfferJson: jobCertificateCredOfferJson
+        jobCertificateCredOffer: jobCertificateCredOffer
     })
 
     console.log('@Company -> Authcrypt "Job-Certificate" Credential Offer for Daniel')
-    let authcryptedJobCertificateCredOffer = await indy.cryptoAuthCrypt(companyWallet, companyDanielVerKey, companyDanielConnectionResponse.verkey, Buffer.from(JSON.stringify(jobCertificateCredOfferJson), 'utf8'))
+    let authcryptedJobCertificateCredOfferRaw = await indy.cryptoAuthCrypt(companyWallet, companyDanielVerKey, companyDanielConnectionResponse.verkey, Buffer.from(JSON.stringify(jobCertificateCredOffer), 'utf8'))
     console.log({
-        authcryptedJobCertificateCredOffer: authcryptedJobCertificateCredOffer
+        authcryptedJobCertificateCredOfferRaw: authcryptedJobCertificateCredOfferRaw
     })
 
     console.log('@Company -> Sending authcrypted "Job-Certificate" Credential Offer to Daniel ......')
@@ -194,7 +194,7 @@ async function run() {
     console.log('@Daniel -> ...... authcrypted "Job-Certificate" Credential Offer received')
 
     console.log('@Daniel -> Authdecrypt "Job-Certificate" Credential Offer from Company')
-    let [companyDanielVerKey2, authdecryptedJobCertificateCredOfferJson, authdecryptedJobCertificateCredOffer] = await authDecrypt(danielWallet, danielCompanyVerkey, authcryptedJobCertificateCredOffer)
+    let [companyDanielVerKey2, authdecryptedJobCertificateCredOfferJson, authdecryptedJobCertificateCredOffer] = await authDecrypt(danielWallet, danielCompanyVerkey, authcryptedJobCertificateCredOfferRaw)
     console.log({
         companyDanielVerKey2: companyDanielVerKey2,
         authdecryptedJobCertificateCredOfferJson: authdecryptedJobCertificateCredOfferJson, 
@@ -212,16 +212,16 @@ async function run() {
     })
 
     console.log('@Daniel -> Create "Job-Certificate" Credential Request for Company')
-    let [jobCertificateCredRequestJson, jobCertificateCredRequestMetadataJson] = await indy.proverCreateCredentialReq(danielWallet, danielCompanyDid, authdecryptedJobCertificateCredOfferJson, theCompanyJobCertificateCredDef, danielMasterSecretId)
+    let [jobCertificateCredRequest, jobCertificateCredRequestMetadata] = await indy.proverCreateCredentialReq(danielWallet, danielCompanyDid, authdecryptedJobCertificateCredOfferJson, theCompanyJobCertificateCredDef, danielMasterSecretId)
     console.log({
-        jobCertificateCredRequestJson: jobCertificateCredRequestJson,
-        jobCertificateCredRequestMetadataJson: jobCertificateCredRequestMetadataJson
+        jobCertificateCredRequest: jobCertificateCredRequest,
+        jobCertificateCredRequestMetadata: jobCertificateCredRequestMetadata
     })
 
     console.log('@Daniel -> Authcrypt "Job-Certificate" Credential Request for Company')
-    let authcryptedJobCertificateCredRequest = await indy.cryptoAuthCrypt(danielWallet, danielCompanyVerkey, companyDanielVerKey2, Buffer.from(JSON.stringify(jobCertificateCredRequestJson), 'utf8'))
+    let authcryptedJobCertificateCredRequestRaw = await indy.cryptoAuthCrypt(danielWallet, danielCompanyVerkey, companyDanielVerKey2, Buffer.from(JSON.stringify(jobCertificateCredRequest), 'utf8'))
     console.log({
-        authcryptedJobCertificateCredRequest: authcryptedJobCertificateCredRequest
+        authcryptedJobCertificateCredRequestRaw: authcryptedJobCertificateCredRequestRaw
     })
 
     console.log('@Daniel -> Sending authcrypted "Job-Certificate" Credential Request to Company ......')
@@ -229,7 +229,7 @@ async function run() {
     console.log('@Company -> ...... authcrypted "Job-Certificate" Credential Request received')
 
     console.log('@Company -> Authdecrypt "Job-Certificate" Credential Request from Daniel')
-    let [danielCompanyVerkey2, authdecryptedJobCertificateCredRequestJson, authdecryptedJobCertificateCredRequest] = await authDecrypt(companyWallet, companyDanielVerKey, authcryptedJobCertificateCredRequest)
+    let [danielCompanyVerkey2, authdecryptedJobCertificateCredRequestJson, authdecryptedJobCertificateCredRequest] = await authDecrypt(companyWallet, companyDanielVerKey, authcryptedJobCertificateCredRequestRaw)
     console.log({
         danielCompanyVerkey2: danielCompanyVerkey2,
         authdecryptedJobCertificateCredRequestJson: authdecryptedJobCertificateCredRequestJson,
@@ -262,17 +262,17 @@ async function run() {
     console.log({
         jobCertificateCredValues: jobCertificateCredValues
     })
-    let [jobCertificateCredJson, jobCertificateCredRevocId, jobCertificateCredRevocRegDeltaJson] = await indy.issuerCreateCredential(companyWallet, jobCertificateCredOfferJson, authdecryptedJobCertificateCredRequestJson, jobCertificateCredValues, null, -1)
+    let [jobCertificateCred, jobCertificateCredRevocId, jobCertificateCredRevocRegDelta] = await indy.issuerCreateCredential(companyWallet, jobCertificateCredOffer, authdecryptedJobCertificateCredRequestJson, jobCertificateCredValues, null, -1)
     console.log({
-        jobCertificateCredJson: jobCertificateCredJson,
+        jobCertificateCred: jobCertificateCred,
         jobCertificateCredRevocId: jobCertificateCredRevocId,
-        jobCertificateCredRevocRegDeltaJson: jobCertificateCredRevocRegDeltaJson
+        jobCertificateCredRevocRegDelta: jobCertificateCredRevocRegDelta
     })
 
     console.log('@Company -> Authcrypt "Job-Certificate" Credential for Daniel')
-    let authcryptedJobCertificateCredJson = await indy.cryptoAuthCrypt(companyWallet, companyDanielVerKey, companyDanielConnectionResponse.verkey, Buffer.from(JSON.stringify(jobCertificateCredJson), 'utf8'))
+    let authcryptedJobCertificateCredRaw = await indy.cryptoAuthCrypt(companyWallet, companyDanielVerKey, companyDanielConnectionResponse.verkey, Buffer.from(JSON.stringify(jobCertificateCred), 'utf8'))
     console.log({
-        authcryptedJobCertificateCredJson: authcryptedJobCertificateCredJson
+        authcryptedJobCertificateCredRaw: authcryptedJobCertificateCredRaw
     })
 
     console.log('@Company -> Sending authcrypted "Job-Certificate" Credential to Daniel ......')
@@ -280,7 +280,7 @@ async function run() {
     console.log('@Daniel -> ...... authcrypted "Job-Certificate" Credential received')
 
     console.log('@Daniel -> Authdecrypt "Job-Certificate" Credential from Company')
-    let [companyDanielVerKey3, authdecryptedJobCertificateCredJson, authdecryptedJobCertificateCred] = await authDecrypt(danielWallet, danielCompanyVerkey, authcryptedJobCertificateCredJson)
+    let [companyDanielVerKey3, authdecryptedJobCertificateCredJson, authdecryptedJobCertificateCred] = await authDecrypt(danielWallet, danielCompanyVerkey, authcryptedJobCertificateCredRaw)
     console.log({
         companyDanielVerKey3: companyDanielVerKey3,
         authdecryptedJobCertificateCredJson: authdecryptedJobCertificateCredJson,
@@ -288,7 +288,7 @@ async function run() {
     })
 
     console.log('@Daniel -> Store "Job-Certificate" Credential from Company')
-    let jobCertificateCredId = await indy.proverStoreCredential(danielWallet, null, jobCertificateCredRequestMetadataJson, authdecryptedJobCertificateCredJson, theCompanyJobCertificateCredDef, null)
+    let jobCertificateCredId = await indy.proverStoreCredential(danielWallet, null, jobCertificateCredRequestMetadata, authdecryptedJobCertificateCredJson, theCompanyJobCertificateCredDef, null)
     console.log({
         jobCertificateCredId: jobCertificateCredId
     })
@@ -338,9 +338,9 @@ async function run() {
     })
 
     console.log('@Park -> Authcrypt "Park-Application" Proof Request for Daniel')
-    let authcryptedJobApplicationProofRequestJson = await indy.cryptoAuthCrypt(parkWallet, parkDanielVerKey, danielParkVerKey, Buffer.from(JSON.stringify(parkApplicationProofRequest), 'utf8'))
+    let authcryptedJobApplicationProofRequestRaw = await indy.cryptoAuthCrypt(parkWallet, parkDanielVerKey, danielParkVerKey, Buffer.from(JSON.stringify(parkApplicationProofRequest), 'utf8'))
     console.log({
-        authcryptedJobApplicationProofRequestJson: authcryptedJobApplicationProofRequestJson
+        authcryptedJobApplicationProofRequestRaw: authcryptedJobApplicationProofRequestRaw
     })
 
     console.log('@Park -> Sending authcrypted "Job-Application" Proof Request to Daniel ......')
@@ -348,7 +348,7 @@ async function run() {
     console.log('@Daniel -> ...... authcrypted "Job-Application" Proof Request received')
 
     console.log('@Daniel -> Authdecrypt "Job-Application" Proof Request from Park')
-    let [parkDanielVerKey2, authdecryptedJobApplicationProofRequestJson, authdecryptedJobApplicationProofRequest] = await authDecrypt(danielWallet, danielParkVerKey, authcryptedJobApplicationProofRequestJson)
+    let [parkDanielVerKey2, authdecryptedJobApplicationProofRequestJson, authdecryptedJobApplicationProofRequest] = await authDecrypt(danielWallet, danielParkVerKey, authcryptedJobApplicationProofRequestRaw)
     console.log({
         parkDanielVerKey2: parkDanielVerKey2,
         authdecryptedJobApplicationProofRequestJson: authdecryptedJobApplicationProofRequestJson,
@@ -418,15 +418,15 @@ async function run() {
     console.log({
         parkApplicationRequestedCreds: parkApplicationRequestedCreds
     })
-    let parkApplicationProofJson = await indy.proverCreateProof(danielWallet, authdecryptedJobApplicationProofRequestJson, parkApplicationRequestedCreds, danielMasterSecretId, proverSchemas, proverCredDefs, proverRevStates)
+    let parkApplicationProof = await indy.proverCreateProof(danielWallet, authdecryptedJobApplicationProofRequestJson, parkApplicationRequestedCreds, danielMasterSecretId, proverSchemas, proverCredDefs, proverRevStates)
     console.log({
-        parkApplicationProofJson: parkApplicationProofJson
+        parkApplicationProof: parkApplicationProof
     })
 
     console.log('@Daniel -> Authcrypt "Park-Application" Proof for Park')
-    let authcryptedParkApplicationProofJson = await indy.cryptoAuthCrypt(danielWallet, danielParkVerKey, parkDanielVerKey2, Buffer.from(JSON.stringify(parkApplicationProofJson), 'utf8'))
+    let authcryptedParkApplicationProofRaw = await indy.cryptoAuthCrypt(danielWallet, danielParkVerKey, parkDanielVerKey2, Buffer.from(JSON.stringify(parkApplicationProof), 'utf8'))
     console.log({
-        authcryptedParkApplicationProofJson: authcryptedParkApplicationProofJson
+        authcryptedParkApplicationProofRaw: authcryptedParkApplicationProofRaw
     })
 
     console.log('@Daniel -> Sending authcrypted "Park-Application" Proof for Park ......')
@@ -434,7 +434,7 @@ async function run() {
     console.log('@Park -> ...... authcrypted "Park-Application" Proof received')
 
     console.log('@Park -> Authdecrypt "Park-Application" Proof from Daniel')
-    let [danielParkVerKey2, authdecryptedParkApplicationProofJson, authdecryptedParkApplicationProof] = await authDecrypt(parkWallet, parkDanielVerKey, authcryptedParkApplicationProofJson)
+    let [danielParkVerKey2, authdecryptedParkApplicationProofJson, authdecryptedParkApplicationProof] = await authDecrypt(parkWallet, parkDanielVerKey, authcryptedParkApplicationProofRaw)
     console.log({
         danielParkVerKey2: danielParkVerKey2,
         authdecryptedParkApplicationProofJson: authdecryptedParkApplicationProofJson,
@@ -456,7 +456,7 @@ async function run() {
     assert('Garcia' === authdecryptedParkApplicationProof.requested_proof.revealed_attrs.attr2_referent.raw)
     assert('18618386178' === authdecryptedParkApplicationProof.requested_proof.self_attested_attrs.attr3_referent)
     assert(await indy.verifierVerifyProof(parkApplicationProofRequest, authdecryptedParkApplicationProof, verifierSchemas, verifierCredDefs, verifierRevRegDefs, verifierRevRegs))
-    
+
 
 
 
@@ -581,14 +581,14 @@ async function getVerinym(poolHandle, from, fromWallet, fromDid, fromToVerKey, t
     })
 
     console.log(`@${to} -> Authcrypt \"${to}\" DID info for \"${from}\"`)
-    let didInfoJson = JSON.stringify({
+    let didInfo = JSON.stringify({
         did: toDid,
         verkey: toVerKey
     })
-    let authcryptedDidInfo = await indy.cryptoAuthCrypt(toWallet, toFromVerKey, fromToVerKey, Buffer.from(didInfoJson, 'utf8'))
+    let authcryptedDidInfoRaw = await indy.cryptoAuthCrypt(toWallet, toFromVerKey, fromToVerKey, Buffer.from(didInfo, 'utf8'))
     console.log({
-        didInfoJson: didInfoJson,
-        authcryptedDidInfo: authcryptedDidInfo
+        didInfo: didInfo,
+        authcryptedDidInfoRaw: authcryptedDidInfoRaw
     })
 
     console.log(`@${to} -> Sending authcrypted \"${to}\" DID info to \"${from}\" ......`)
@@ -596,7 +596,7 @@ async function getVerinym(poolHandle, from, fromWallet, fromDid, fromToVerKey, t
     console.log(`@${from} -> ...... DID info received`)
 
     console.log(`@${from} -> Authdecrypt \"${to}\" DID info from \"${to}\"`)
-    let [senderVerKey, authdecryptedDidInfoRaw] = await indy.cryptoAuthDecrypt(fromWallet, fromToVerKey, Buffer.from(authcryptedDidInfo))
+    let [senderVerKey, authdecryptedDidInfoRaw] = await indy.cryptoAuthDecrypt(fromWallet, fromToVerKey, Buffer.from(authcryptedDidInfoRaw))
     let authdecryptedDidInfo = JSON.parse(Buffer.from(authdecryptedDidInfoRaw))
     console.log({
         senderVerKey: senderVerKey,
