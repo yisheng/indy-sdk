@@ -309,7 +309,7 @@ async function run() {
     console.log("=== Job-Certificate Proving ===\n")
 
     console.log('@Park -> Create "Park-Application" Proof Request')
-    let parkApplicationProofRequestJson = {
+    let parkApplicationProofRequest = {
         nonce: '1432422343242122312411212',
         name: 'Park-Application',
         version: '0.1',
@@ -334,11 +334,11 @@ async function run() {
         }
     }
     console.log({
-        parkApplicationProofRequestJson: parkApplicationProofRequestJson
+        parkApplicationProofRequest: parkApplicationProofRequest
     })
 
     console.log('@Park -> Authcrypt "Park-Application" Proof Request for Daniel')
-    let authcryptedJobApplicationProofRequestJson = await indy.cryptoAuthCrypt(parkWallet, parkDanielVerKey, danielParkVerKey, Buffer.from(JSON.stringify(parkApplicationProofRequestJson), 'utf8'))
+    let authcryptedJobApplicationProofRequestJson = await indy.cryptoAuthCrypt(parkWallet, parkDanielVerKey, danielParkVerKey, Buffer.from(JSON.stringify(parkApplicationProofRequest), 'utf8'))
     console.log({
         authcryptedJobApplicationProofRequestJson: authcryptedJobApplicationProofRequestJson
     })
