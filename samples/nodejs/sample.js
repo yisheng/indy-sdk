@@ -385,7 +385,9 @@ async function run() {
     credsForJobApplicationProof[`${credForAttr1.referent}`] = credForAttr1
     credsForJobApplicationProof[`${credForAttr2.referent}`] = credForAttr2
     credsForJobApplicationProof[`${credForAttr3.referent}`] = credForAttr3
-    console.log(credsForJobApplicationProof)
+    console.log({
+        credsForJobApplicationProof: credsForJobApplicationProof
+    })
 
 
 
