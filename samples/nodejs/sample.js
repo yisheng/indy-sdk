@@ -205,14 +205,14 @@ async function run() {
     console.log("=== Daniel Getting Job-Certificate Credential ===\n")
 
     console.log('@Daniel -> Get "Company Job-Certificate" Credential Definition from Ledger')
-    let [theCompanyJobCertificateCredDefId, theCompanyJobCertificateCredDefJson] = await getCredDef(poolHandle, danielCompanyDid, authdecryptedJobCertificateCredOffer.cred_def_id)
+    let [theCompanyJobCertificateCredDefId, theCompanyJobCertificateCredDef] = await getCredDef(poolHandle, danielCompanyDid, authdecryptedJobCertificateCredOffer.cred_def_id)
     console.log({
         theCompanyJobCertificateCredDefId: theCompanyJobCertificateCredDefId,
-        theCompanyJobCertificateCredDefJson: theCompanyJobCertificateCredDefJson
+        theCompanyJobCertificateCredDef: theCompanyJobCertificateCredDef
     })
 
     console.log('@Daniel -> Create "Job-Certificate" Credential Request for Company')
-    let [jobCertificateCredRequestJson, jobCertificateCredRequestMetadataJson] = await indy.proverCreateCredentialReq(danielWallet, danielCompanyDid, authdecryptedJobCertificateCredOfferJson, theCompanyJobCertificateCredDefJson, danielMasterSecretId)
+    let [jobCertificateCredRequestJson, jobCertificateCredRequestMetadataJson] = await indy.proverCreateCredentialReq(danielWallet, danielCompanyDid, authdecryptedJobCertificateCredOfferJson, theCompanyJobCertificateCredDef, danielMasterSecretId)
     console.log({
         jobCertificateCredRequestJson: jobCertificateCredRequestJson,
         jobCertificateCredRequestMetadataJson: jobCertificateCredRequestMetadataJson
@@ -288,7 +288,7 @@ async function run() {
     })
 
     console.log('@Daniel -> Store "Job-Certificate" Credential from Company')
-    let jobCertificateCredId = await indy.proverStoreCredential(danielWallet, null, jobCertificateCredRequestMetadataJson, authdecryptedJobCertificateCredJson, theCompanyJobCertificateCredDefJson, null)
+    let jobCertificateCredId = await indy.proverStoreCredential(danielWallet, null, jobCertificateCredRequestMetadataJson, authdecryptedJobCertificateCredJson, theCompanyJobCertificateCredDef, null)
     console.log({
         jobCertificateCredId: jobCertificateCredId
     })
