@@ -239,11 +239,11 @@ async function run() {
     console.log('@Company -> Create "Job-Certificate" Credential for Daniel')
     let jobCertificateCredValues = {
         first_name: {
-            raw: 'Alice',
+            raw: 'Daniel',
             encoded: '245712572474217942457235975012103335'
         },
         last_name: {
-            raw: 'Garcia',
+            raw: 'Yang',
             encoded: '312643218496194691632153761283356127'
         },
         salary: {
@@ -439,7 +439,8 @@ async function run() {
         danielParkVerKey2: danielParkVerKey2,
         authdecryptedParkApplicationProofJson: authdecryptedParkApplicationProofJson,
         authdecryptedParkApplicationProof: authdecryptedParkApplicationProof,
-        'authdecryptedParkApplicationProof.requested_proof': authdecryptedParkApplicationProof.requested_proof
+        'authdecryptedParkApplicationProof.requested_proof.revealed_attrs': authdecryptedParkApplicationProof.requested_proof.revealed_attrs,
+        'authdecryptedParkApplicationProof.requested_proof.self_attested_attrs': authdecryptedParkApplicationProof.requested_proof.self_attested_attrs
     })
 
     console.log('@Park -> Verifier Get Entities (Schemas and Credential Definitions) from Ledger')
@@ -452,8 +453,8 @@ async function run() {
     })
 
     console.log('@Park -> Verify "Park-Application" Proof from Daniel')
-    assert('Alice' === authdecryptedParkApplicationProof.requested_proof.revealed_attrs.attr1_referent.raw)
-    assert('Garcia' === authdecryptedParkApplicationProof.requested_proof.revealed_attrs.attr2_referent.raw)
+    assert('Daniel' === authdecryptedParkApplicationProof.requested_proof.revealed_attrs.attr1_referent.raw)
+    assert('Yang' === authdecryptedParkApplicationProof.requested_proof.revealed_attrs.attr2_referent.raw)
     assert('18618386178' === authdecryptedParkApplicationProof.requested_proof.self_attested_attrs.attr3_referent)
     assert(await indy.verifierVerifyProof(parkApplicationProofRequest, authdecryptedParkApplicationProof, verifierSchemas, verifierCredDefs, verifierRevRegDefs, verifierRevRegs))
 
