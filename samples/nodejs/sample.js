@@ -317,7 +317,7 @@ async function run() {
             attr1_referent: {
                 name: 'first_name',
                 restrictions: [{
-                    cred_def_id: companyJobCertificateCredDefId // Issue: How to know?
+                    cred_def_id: companyJobCertificateCredDefId // TODO: How to know?
                 }]
             },
             attr2_referent: {
