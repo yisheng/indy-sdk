@@ -529,12 +529,12 @@ async function getVerinym(poolHandle, from, fromWallet, fromDid, fromToVerKey, t
     console.log(`@${from} -> ...... DID info received`)
 
     console.log(`@${from} -> Authdecrypt \"${to}\" DID info from \"${to}\"`)
-    let [senderVerKey, authdecryptedDidInfo] = await indy.cryptoAuthDecrypt(fromWallet, fromToVerKey, Buffer.from(authcryptedDidInfo))
-    let authdecryptedDidInfoJson = JSON.parse(Buffer.from(authdecryptedDidInfo))
+    let [senderVerKey, authdecryptedDidInfoRaw] = await indy.cryptoAuthDecrypt(fromWallet, fromToVerKey, Buffer.from(authcryptedDidInfo))
+    let authdecryptedDidInfo = JSON.parse(Buffer.from(authdecryptedDidInfoRaw))
     console.log({
         senderVerKey: senderVerKey,
-        authdecryptedDidInfo: authdecryptedDidInfo,
-        authdecryptedDidInfoJson: authdecryptedDidInfoJson
+        authdecryptedDidInfoRaw: authdecryptedDidInfoRaw,
+        authdecryptedDidInfo: authdecryptedDidInfo
     })
 
     console.log(`@${from} -> Authenticates \"${to}\" by comparison of Verkeys`)
@@ -547,7 +547,7 @@ async function getVerinym(poolHandle, from, fromWallet, fromDid, fromToVerKey, t
     }
 
     console.log(`@${from} -> Send Nym to Ledger for \"${to}\" DID with ${role} Role`)
-    await sendNym(poolHandle, fromWallet, fromDid, authdecryptedDidInfoJson.did, authdecryptedDidInfoJson.verkey, role)
+    await sendNym(poolHandle, fromWallet, fromDid, authdecryptedDidInfo.did, authdecryptedDidInfo.verkey, role)
 
     return toDid
 }
