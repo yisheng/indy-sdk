@@ -389,9 +389,74 @@ async function run() {
         credsForJobApplicationProof: credsForJobApplicationProof
     })
 
+    console.log('@Daniel -> Prover Get Entities (Schemas and Credential Definitions) from Ledger')
+    let [proverSchemas, proverCredDefs, proverRevStates] = await proverGetEntitiesFromLedger(poolHandle, danielParkDid, credsForJobApplicationProof, 'Daniel')
+    console.log({
+        proverSchemas: proverSchemas,
+        proverCredDefs: proverCredDefs,
+        proverRevStates: proverRevStates
+    })
 
+    console.log('@Daniel -> Create "Park-Application" Proof')
+    let parkApplicationRequestedCreds = {
+        self_attested_attributes: {
+            attr3_referent: '18618386178'
+        },
+        requested_attributes: {
+            attr1_referent: {
+                cred_id: credForAttr1.referent,
+                revealed: true
+            },
+            attr2_referent: {
+                cred_id: credForAttr2.referent,
+                revealed: true
+            }
+        },
+        requested_predicates: {
+        }
+    }
+    console.log({
+        parkApplicationRequestedCreds: parkApplicationRequestedCreds
+    })
+    let parkApplicationProofJson = await indy.proverCreateProof(danielWallet, authdecryptedJobApplicationProofRequestJson, parkApplicationRequestedCreds, danielMasterSecretId, proverSchemas, proverCredDefs, proverRevStates)
+    console.log({
+        parkApplicationProofJson: parkApplicationProofJson
+    })
 
+    console.log('@Daniel -> Authcrypt "Park-Application" Proof for Park')
+    let authcryptedParkApplicationProofJson = await indy.cryptoAuthCrypt(danielWallet, danielParkVerKey, parkDanielVerKey2, Buffer.from(JSON.stringify(parkApplicationProofJson), 'utf8'))
+    console.log({
+        authcryptedParkApplicationProofJson: authcryptedParkApplicationProofJson
+    })
 
+    console.log('@Daniel -> Sending authcrypted "Park-Application" Proof for Park ......')
+
+    console.log('@Park -> ...... authcrypted "Park-Application" Proof received')
+
+    console.log('@Park -> Authdecrypt "Park-Application" Proof from Daniel')
+    let [danielParkVerKey2, authdecryptedParkApplicationProofJson, authdecryptedParkApplicationProof] = await authDecrypt(parkWallet, parkDanielVerKey, authcryptedParkApplicationProofJson)
+    console.log({
+        danielParkVerKey2: danielParkVerKey2,
+        authdecryptedParkApplicationProofJson: authdecryptedParkApplicationProofJson,
+        authdecryptedParkApplicationProof: authdecryptedParkApplicationProof,
+        'authdecryptedParkApplicationProof.requested_proof': authdecryptedParkApplicationProof.requested_proof
+    })
+
+    console.log('@Park -> Verifier Get Entities (Schemas and Credential Definitions) from Ledger')
+    let [verifierSchemas, verifierCredDefs, verifierRevRegs, verifierRevRegDefs] = await verifierGetEntitiesFromLedger(poolHandle, parkDanielDid, authdecryptedParkApplicationProof.identifiers, 'Park')
+    console.log({
+        verifierSchemas: verifierSchemas,
+        verifierCredDefs: verifierCredDefs,
+        verifierRevRegs: verifierRevRegs,
+        verifierRevRegDefs: verifierRevRegDefs
+    })
+
+    console.log('@Park -> Verify "Park-Application" Proof from Daniel')
+    assert('Alice' === authdecryptedParkApplicationProof.requested_proof.revealed_attrs.attr1_referent.raw)
+    assert('Garcia' === authdecryptedParkApplicationProof.requested_proof.revealed_attrs.attr2_referent.raw)
+    assert('18618386178' === authdecryptedParkApplicationProof.requested_proof.self_attested_attrs.attr3_referent)
+    assert(await indy.verifierVerifyProof(parkApplicationProofRequest, authdecryptedParkApplicationProof, verifierSchemas, verifierCredDefs, verifierRevRegDefs, verifierRevRegs))
+    
 
 
 
@@ -610,4 +675,63 @@ async function authDecrypt(walletHandle, recipientVerKey, encryptedMessageRaw) {
     let decryptedMessageJson = JSON.stringify(decryptedMessage)
 
     return [senderVerKey, decryptedMessageJson, decryptedMessage]
+}
+
+async function proverGetEntitiesFromLedger(poolHandle, submitterDid, credentials, actor) {
+    console.log("\n*** proverGetEntitiesFromLedger ***\n")
+
+    let schemas = {}
+    let credDefs = {}
+    let revStates = {}
+
+    for (let referent of Object.keys(credentials)) {
+        let credential = credentials[referent]
+        console.log({
+            credential: credential
+        })
+
+        console.log(`@${actor} -> Get Schema from Ledger`)
+        let [schemaId, schema] = await getSchema(poolHandle, submitterDid, credential.schema_id)
+        schemas[schemaId] = schema
+
+        console.log(`@${actor} -> Get Credential Definition from Ledger`)
+        let [credDefId, credDef] = await getCredDef(poolHandle, submitterDid, credential.cred_def_id)
+        credDefs[credDefId] = credDef
+
+        if (credential.rev_reg_seq_no) {
+            // TODO: Create Revocation States
+        }
+    }
+
+    return [schemas, credDefs, revStates]
+}
+
+async function verifierGetEntitiesFromLedger(poolHandle, submitterDid, credentials, actor) {
+    console.log("\n*** verifierGetEntitiesFromLedger ***\n")
+
+    let schemas = {}
+    let credDefs = {}
+    let revRegs = {}
+    let revRegDefs = {}
+
+    for (let referent of Object.keys(credentials)) {
+        let credential = credentials[referent]
+        console.log({
+            credential: credential
+        })
+
+        console.log(`@${actor} -> Get Schema from Ledger`)
+        let [schemaId, schema] = await getSchema(poolHandle, submitterDid, credential.schema_id)
+        schemas[schemaId] = schema
+
+        console.log(`@${actor} -> Get Credential Definition from Ldger`)
+        let [credDefId, credDef] = await getCredDef(poolHandle, submitterDid, credential.cred_def_id)
+        credDefs[credDefId] = credDef
+
+        if (credential.rev_reg_seq_no) {
+            // TODO: Get Revocation Definitions and Revocation Registries
+        }
+
+        return [schemas, credDefs, revRegs, revRegDefs]
+    }
 }
