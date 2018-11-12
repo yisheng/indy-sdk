@@ -1,11 +1,13 @@
 # Getting started with the node.js wrapper
 
-* Make sure you have libindy installed. Checkout the guides [here](https://github.com/hyperledger/indy-sdk/tree/master/doc).
+* Make sure you have libindy installed. Checkout the guides [here](https://github.com/hyperledger/indy-sdk#installing-the-sdk).
     * On Linux, export the `LD_LIBRARY_PATH` environment variable to point to the `libindy.so` parent directory, or copy libindy.so to `/usr/lib/libindy.so`.
     * On Mac OS, you must have `libindy.dylib` at `/usr/local/lib/libindy.dylib` before running npm install.
 * Inside `samples/nodejs/`
     * Make sure you have a running ledger with `npm run ledger`. You must have docker installed.
-    * Then run `npm install` and `npm start`.
+    * Then run `npm install` to install dependencies.
+    * `npm run gettingStarted`: Run the getting started sample
+    * `npm run humsen`: Run the Humsen sample
  
 ### Troubleshooting
 
