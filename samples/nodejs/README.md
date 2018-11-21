@@ -8,7 +8,8 @@
     * `npm install`: Install dependencies
     * `npm run ledger`: Run a ledger
     * `npm run gettingStarted`: Run the getting started sample
-    * `npm run humsen`: Run the Humsen sample
+    * `npm run humsen`: Run the Humsen sample with local ledger
+    * `npm run humsen remote`: Run the Humsen sample with remote ledger located at jdcloud
  
 ### Troubleshooting
 

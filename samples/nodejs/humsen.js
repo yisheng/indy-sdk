@@ -4,11 +4,18 @@ const indy = require('indy-sdk')
 const util = require('./util')
 const assert = require('assert')
 
-run()
+const poolEnv = process.argv[2] ? process.argv[2] : 'default'
+if (poolEnv !== 'default' && poolEnv !== 'remote') {
+    throw Error(`'${poolEnv}' is not supported, try 'default' or 'remote'.`)
+}
 
-async function run() {
+const stewardSeed = poolEnv === 'remote' ? '19e2ea3730c3d62f36a095a44d343c7f5d81e0168c7f987b3d70a37c516bb45d' : '000000000000000000000000Steward1'
+
+run(poolEnv)
+
+async function run(poolEnv) {
     let poolName = 'pool1'
-    let poolGenesisTxnPath = await util.getPoolGenesisTxnPath(poolName)
+    let poolGenesisTxnPath = await util.getPoolGenesisTxnPath(poolName, poolEnv)
     let poolConfig = {
         "genesis_txn": poolGenesisTxnPath
     }
@@ -35,7 +42,7 @@ async function run() {
 
     console.log('@Steward -> Create DID')
     let stewardDidInfo = {
-        'seed': '000000000000000000000000Steward1'
+        'seed': stewardSeed
     }
     let [stewardDid, stewardVerKey] = await indy.createAndStoreMyDid(stewardWallet, stewardDidInfo)
     console.log({
