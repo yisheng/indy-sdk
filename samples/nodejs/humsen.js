@@ -739,7 +739,7 @@ async function verifierGetEntitiesFromLedger(poolHandle, submitterDid, credentia
         if (credential.rev_reg_seq_no) {
             // TODO: Get Revocation Definitions and Revocation Registries
         }
-
-        return [schemas, credDefs, revRegs, revRegDefs]
     }
+
+    return [schemas, credDefs, revRegs, revRegDefs]
 }
