@@ -24,6 +24,8 @@ export class VCXRuntime {
   }
 
   private _initializeBasepath = (): string => {
+    return '/Users/yisheng/Projects/indy-sdk/vcx/libvcx/target/debug/libvcx.dylib'
+
     const library = 'libvcx.so' // TODO: FIXME provide better way to resolve library
     const customPath = process.env.LIBVCX_PATH ? process.env.LIBVCX_PATH + library : undefined
     return customPath || this._config.basepath || path.resolve(__dirname, '/usr/lib/' + library)
