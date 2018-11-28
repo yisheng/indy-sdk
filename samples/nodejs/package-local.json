@@ -1,0 +1,39 @@
+{
+  "name": "gettingstarted",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Getting Started Guide in node.js for the indy-sdk",
+  "main": "gettingStarted.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node gettingStarted.js",
+    "ledger": "cd ../../ && docker build -f ci/indy-pool.dockerfile -t indy_pool_sdk . && docker run --name indy_pool_sdk -itd -p 9701-9708:9701-9708 indy_pool_sdk",
+    "gettingStarted": "node gettingStarted.js",
+    "humsen": "node humsen.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hyperledger/indy-sdk.git"
+  },
+  "contributors": [
+    {
+      "name": "Spencer Holman",
+      "email": "sah14@byu.edu"
+    },
+    {
+      "name": "Matthew Hailstone",
+      "email": "matthew_hailstone@byu.edu"
+    }
+  ],
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/hyperledger/indy-sdk/issues"
+  },
+  "homepage": "https://github.com/hyperledger/indy-sdk#readme",
+  "dependencies": {
+    "cryptiles": "^4.1.1",
+    "home-dir": "^1.0.0",
+    "indy-sdk": "file:../../wrappers/nodejs",
+    "mkdirp": "^0.5.1"
+  }
+}
