@@ -28,13 +28,13 @@ provisionConfig = {
   'wallet_name':'faber_wallet',
   'wallet_key':'123',
   'payment_method': 'null',
-  'enterprise_seed':'000000000000000000000000Trustee1'
+  'enterprise_seed':'19e2ea3730c3d62f36a095a44d343c7f5d81e0168c7f987b3d70a37c516bb45d'
 }
 
 
 async def main():
 
-    payment_plugin = cdll.LoadLibrary("libnullpay.so")
+    payment_plugin = cdll.LoadLibrary("/Users/yisheng/Projects/indy-sdk/libnullpay/target/debug/libnullpay.dylib")
     payment_plugin.nullpay_init()
 
     logging.default_logger()
@@ -44,7 +44,10 @@ async def main():
     # Set some additional configuration options specific to faber
     config['institution_name'] = 'Faber'
     config['institution_logo_url'] = 'http://robohash.org/234'
-    config['genesis_path'] = 'docker.txn'
+    config['genesis_path'] = '/Users/yisheng/Projects/indy-sdk/vcx/wrappers/python3/demo/docker-jd.txn'
+    config['path'] = '/Users/yisheng/Projects/indy-sdk/vcx/wrappers/python3/demo/docker-jd.txn'
+    config['pool_name'] = 'gytest'
+    print('config: ', config)
     
     print("#2 Initialize libvcx with new configuration")
     await vcx_init_with_config(json.dumps(config))

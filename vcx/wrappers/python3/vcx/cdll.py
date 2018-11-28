@@ -24,7 +24,8 @@ def _load_cdll() -> CDLL:
     except KeyError:
         raise OSError("OS isn't supported: %s", os_name)
 
-    library_name = "{0}{1}{2}".format(prefix, LIBRARY, suffix)
+    # library_name = "{0}{1}{2}".format(prefix, LIBRARY, suffix)
+    library_name = "/Users/yisheng/Projects/indy-sdk/vcx/libvcx/target/debug/libvcx.dylib"
 
     try:
         res = CDLL(library_name)
