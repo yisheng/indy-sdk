@@ -34,7 +34,7 @@ provisionConfig = {
 
 async def main():
 
-    payment_plugin = cdll.LoadLibrary("/Users/yisheng/Projects/indy-sdk/libnullpay/target/debug/libnullpay.dylib")
+    payment_plugin = cdll.LoadLibrary("../../../../libnullpay/target/debug/libnullpay.dylib")
     payment_plugin.nullpay_init()
 
     logging.default_logger()
@@ -44,8 +44,7 @@ async def main():
     # Set some additional configuration options specific to faber
     config['institution_name'] = 'Faber'
     config['institution_logo_url'] = 'http://robohash.org/234'
-    config['genesis_path'] = '/Users/yisheng/Projects/indy-sdk/vcx/wrappers/python3/demo/docker-jd.txn'
-    config['path'] = '/Users/yisheng/Projects/indy-sdk/vcx/wrappers/python3/demo/docker-jd.txn'
+    config['genesis_path'] = './docker-jd.txn'
     config['pool_name'] = 'gytest'
     print('config: ', config)
     
