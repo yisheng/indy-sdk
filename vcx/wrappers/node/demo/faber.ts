@@ -1,7 +1,6 @@
 'use strict'
 
-import * as vcx from './src'
-import { Schema } from './src';
+import * as vcx from '../src'
 
 run()
 
@@ -58,7 +57,7 @@ async function run() {
     sourceId: 'testSchemaSchemaId',
     schemaId: 'testSchemaSourceId'
   })
-  const schemaLookup = await Schema.lookup(dataSchemaLookup())
+  const schemaLookup = await vcx.Schema.lookup(dataSchemaLookup())
   console.log({
     dataSchemaLookup: dataSchemaLookup,
     schemaLookup: schemaLookup
