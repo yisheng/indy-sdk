@@ -1,10 +1,18 @@
 'use strict'
 
 import * as vcx from '../src'
+import * as ffi from 'ffi'
+import * as path from 'path'
 
 run()
 
 async function run() {
+  const nullpayPath = path.resolve(__dirname, '../../../../libnullpay/target/debug/libnullpay.dylib')
+  const nullpay = ffi.Library(nullpayPath, {
+    'nullpay_init': ['void', []]
+  })
+  nullpay.nullpay_init()
+
   console.log('#1 Provision an agent and wallet, get back configuration details')
   let provisionConfig = {
     'agency_url':'http://localhost:8080',
@@ -24,14 +32,15 @@ async function run() {
   vcxConfig.institution_logo_url = 'http://robohash.org/234'
   vcxConfig.genesis_path = '/Users/yisheng/Projects/indy-sdk/vcx/wrappers/python3/demo/docker-jd.txn'
   vcxConfig.pool_name = 'gytest'
-  vcxConfig.enable_test_mode = 'true'
+  // vcxConfig.enable_test_mode = 'true'
   console.log({vcxConfig: vcxConfig})
   console.log(JSON.stringify(vcxConfig))
-  vcx.initVcxWithConfig(JSON.stringify(vcxConfig))
-  // vcx.initVcxWithConfig('ENABLE_TEST_MODE')
+  await vcx.initVcxWithConfig(JSON.stringify(vcxConfig))
+  // await vcx.initVcxWithConfig('ENABLE_TEST_MODE')
 
-  // vcx.defaultLogger('debug')
-  vcx.defaultLogger('info')
+  await vcx.defaultLogger('trace')
+  // await vcx.defaultLogger('debug')
+  // await vcx.defaultLogger('info')
 
   console.log('#3 Create a new schema on the ledger')
   const dataSchemaCreate = (): vcx.ISchemaCreateData => ({
@@ -42,7 +51,7 @@ async function run() {
         'degree'
       ],
       name: 'degree schema',
-      version: '1.0.0'
+      version: '1.0.1'
     },
     paymentHandle: 0,
     sourceId: 'schema_uuidoops'
