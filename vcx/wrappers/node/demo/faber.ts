@@ -34,13 +34,12 @@ async function run() {
   vcxConfig.pool_name = 'gytest'
   // vcxConfig.enable_test_mode = 'true'
   console.log({vcxConfig: vcxConfig})
-  console.log(JSON.stringify(vcxConfig))
   await vcx.initVcxWithConfig(JSON.stringify(vcxConfig))
   // await vcx.initVcxWithConfig('ENABLE_TEST_MODE')
 
-  await vcx.defaultLogger('trace')
+  // await vcx.defaultLogger('trace')
   // await vcx.defaultLogger('debug')
-  // await vcx.defaultLogger('info')
+  await vcx.defaultLogger('info')
 
   console.log('#3 Create a new schema on the ledger')
   const dataSchemaCreate = (): vcx.ISchemaCreateData => ({
@@ -51,54 +50,59 @@ async function run() {
         'degree'
       ],
       name: 'degree schema',
-      version: '1.0.1'
+      version: randomInt(1, 100) + '.' + randomInt(1, 100) + '.' + randomInt(1, 100)
     },
     paymentHandle: 0,
-    sourceId: 'schema_uuidoops'
+    sourceId: 'schema_uuid'
   })
   const schemaCreated = await vcx.Schema.create(dataSchemaCreate())
   console.log({
-    dataSchemaCreate: dataSchemaCreate,
-    schemaCreated: schemaCreated
+    dataSchemaCreate: dataSchemaCreate(),
+    schemaCreated: schemaCreated,
+    schemaId: schemaCreated.schemaId
   })
 
   const dataSchemaLookup = () : vcx.ISchemaLookupData => ({
-    sourceId: 'testSchemaSchemaId',
-    schemaId: 'testSchemaSourceId'
+    sourceId: 'schema_uuid',
+    schemaId: schemaCreated.schemaId
   })
   const schemaLookup = await vcx.Schema.lookup(dataSchemaLookup())
   console.log({
-    dataSchemaLookup: dataSchemaLookup,
+    dataSchemaLookup: dataSchemaLookup(),
     schemaLookup: schemaLookup
   })
 
   console.log('#4 Create a new credential definition on the ledger')
   const dataCredentialDefCreate = (): vcx.ICredentialDefCreateData => ({
-    sourceId: 'testCredentialDefSourceId',
-    name: 'testCredentialDefName',
-    schemaId: 'testCredentialDefSchemaId',
+    sourceId: 'credef_uuid',
+    name: 'credef_uuid',
+    schemaId: schemaCreated.schemaId,
     revocation: false,
     paymentHandle: 0
   })
   const credentialDefCreated = await vcx.CredentialDef.create(dataCredentialDefCreate())
   const credentialDefId = await credentialDefCreated.getCredDefId()
   console.log({
-    dataCredentialDefCreate: dataCredentialDefCreate,
+    dataCredentialDefCreate: dataCredentialDefCreate(),
     credentialDefCreated: credentialDefCreated,
     credentialDefId: credentialDefId
   })
 
   console.log('#5 Create a connection to alice and print out the invite details')
   const dataConnectionCreate = (): vcx.IConnectionCreateData => ({
-    id: 'testConnectionId'
+    id: 'alice'
   })
   const connectionCreated = await vcx.Connection.create(dataConnectionCreate())
   const inviteDetail1 = await connectionCreated.connect()
   const inviteDetail2 = await connectionCreated.inviteDetails()
   console.log({
-    dataConnectionCreate: dataConnectionCreate,
+    dataConnectionCreate: dataConnectionCreate(),
     connectionCreated: connectionCreated,
     inviteDetail1: inviteDetail1,
     inviteDetail2: inviteDetail2
   })
+}
+
+function randomInt(min: number, max: number) {
+  return Math.floor(Math.random() * (max - min + 1) + min)
 }
