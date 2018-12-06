@@ -11,3 +11,10 @@ Podfile.lock
 
 
 /wrappers/python/venv/
+
+
+vcx/wrappers/ios/vcx/tmp
+vcx/wrappers/ios/vcx/lib/*.a
+vcx/wrappers/ios/vcx/lib/*.tocombine
+vcx/wrappers/ios/vcx/vcx.framework/lib/*.a
+vcx/wrappers/ios/vcx/vcx.framework/vcx
