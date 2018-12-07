@@ -93,7 +93,7 @@ async function run() {
     id: 'alice'
   })
   const connectionCreated = await vcx.Connection.create(dataConnectionCreate())
-  const inviteDetail1 = await connectionCreated.connect()
+  const inviteDetail1 = await connectionCreated.connect({ data: '{"connection_type":"QR"}' })
   const inviteDetail2 = await connectionCreated.inviteDetails()
   console.log({
     dataConnectionCreate: dataConnectionCreate(),
