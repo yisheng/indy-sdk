@@ -101,8 +101,30 @@ async function run() {
     inviteDetail1: inviteDetail1,
     inviteDetail2: inviteDetail2
   })
+
+  console.log('#6 Poll agency and wait for alice to accept the invitation (start alice.py now)')
+  let connectionState = await connectionCreated.getState()
+  console.log({
+    connectionState: connectionState
+  })
+  while (connectionState !== vcx.StateType.Accepted) {
+    await sleep(5000)
+    await connectionCreated.updateState()
+    connectionState = await connectionCreated.getState()
+
+    console.log({
+      connectionState: connectionState
+    })
+  }
+  
 }
 
 function randomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
+function sleep(ms: number) {
+  return new Promise(resolve=>{
+      setTimeout(resolve, ms)
+  })
 }
