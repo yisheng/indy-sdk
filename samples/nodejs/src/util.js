@@ -3,7 +3,7 @@ const mkdirp = require('mkdirp');
 const fs = require('fs');
 const os = require('os');
 
-exports.getPoolGenesisTxnPath = async function(poolName, poolEnv) {
+async function getPoolGenesisTxnPath(poolName, poolEnv) {
     let path = `${os.tmpdir()}/indy/${poolName}.txn`;
     await savePoolGenesisTxnFile(path, poolEnv);
     return path
@@ -38,4 +38,25 @@ async function mkdir(filePath) {
             else resolve(res);
         })
     })
+}
+
+function pathToIndyClientHome() {
+    return require('os').homedir() + "/.indy_client"
+}
+
+function sleep(duration){
+    return new Promise(resolve => {
+        setTimeout(resolve,duration)
+    })
+}
+
+function getCurrentTimeInSeconds() {
+    return Math.floor(Date.now() / 1000)
+}
+
+module.exports = {
+    getPoolGenesisTxnPath,
+    getPathToIndyClientHome: pathToIndyClientHome,
+    sleep,
+    getCurrentTimeInSeconds
 }
