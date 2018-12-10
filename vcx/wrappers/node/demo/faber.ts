@@ -92,8 +92,11 @@ async function run() {
   const dataConnectionCreate = (): vcx.IConnectionCreateData => ({
     id: 'alice'
   })
+  const dataConnectionConnectOptions = (): vcx.IConnectOptions => ({
+    data: '{"connection_type":"QR"}'
+  })
   const connectionCreated = await vcx.Connection.create(dataConnectionCreate())
-  const inviteDetail1 = await connectionCreated.connect({ data: '{"connection_type":"QR"}' })
+  const inviteDetail1 = await connectionCreated.connect(dataConnectionConnectOptions())
   const inviteDetail2 = await connectionCreated.inviteDetails()
   console.log({
     dataConnectionCreate: dataConnectionCreate(),
@@ -116,7 +119,28 @@ async function run() {
       connectionState: connectionState
     })
   }
-  
+
+  console.log('#12 Create an IssuerCredential object using the schema and credential definition')
+  const dataIssuerCredentialCreate = (): vcx.IIssuerCredentialCreateData => ({
+    attr: {
+      name: 'Alice',
+      date: '2018-12-07',
+      degree: 'Bachelor'
+    },
+    credDefId: credentialDefId,
+    sourceId: 'alice_degree',
+    credentialName: 'cred',
+    price: '0'
+  })
+
+  const issuerCredential = await vcx.IssuerCredential.create(dataIssuerCredentialCreate())
+  // await issuerCredential.sendOffer(connectionCreated)
+  console.log({
+    dataIssuerCredentialCreate: dataIssuerCredentialCreate(),
+    issuerCredential: issuerCredential
+  })
+
+  console.log('... to be continued ...')
 }
 
 function randomInt(min: number, max: number) {

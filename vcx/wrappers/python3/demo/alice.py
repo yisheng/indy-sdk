@@ -49,7 +49,7 @@ async def main():
     print("#10 Convert to valid json and string and create a connection to faber")
     jdetails = json.loads(details)
     connection_to_faber = await Connection.create_with_details('faber', json.dumps(jdetails))
-    await connection_to_faber.connect(None)
+    await connection_to_faber.connect('{"connection_type":"QR"}')
     await connection_to_faber.update_state()
 
     print("#11 Wait for faber.py to issue a credential offer")
